@@ -35,13 +35,21 @@ export default function useProofDetailsForm(initialData) {
   const [letterTypeKey, setLetterTypeKey] = useState('');
   const [letterTypes, setLetterTypes] = useState([]);
 
+  // Employee data - this should match the employee object from HRHeader
+  const employee = {
+    mEmpID: 16843, // This should match the MempId used in handleSubmit
+    name: "Manoj Kandan M",
+    genId: "25504878",
+    email: "manoj.kandan@partner.samsung.com",
+    designation: "Outsourcing"
+  };
 
   // Fetch letter types
   useEffect(() => {
     async function fetchLetterTypes() {
       try {
         const data = await getLetterTypes();
-        setLetterTypes(data || []);
+        setLetterTypes(data);
       } catch (error) {
         console.error("Error fetching letter types:", error);
       }
@@ -49,14 +57,23 @@ export default function useProofDetailsForm(initialData) {
     fetchLetterTypes();
   }, []);
 
+
+  const handleLetterTypeChange = (e) => {
+    setLetterType(e.target.value);
+    setIsSubmitted(false);
+    setReason('');
+    setComment('');
+    
+  };
+
   // Submit form
   const handleSubmit = async () => {
     try {
-      const generatedInstanceId = `INST-${Date.now()}`; 
+      const generatedInstanceId = 10570820; 
       const payload = {
         lrid: 0,
         instanceID: generatedInstanceId, // Auto-generate on submit
-        MempId: 689,                   // Employee ID
+        MempId: 16843,                   // Employee ID
         lKeyValue: letterTypeKey,         // Could be generated or fetched
         letterType: letterType,
         permanentAddress: permanentAddress,
@@ -90,6 +107,16 @@ export default function useProofDetailsForm(initialData) {
     setComment,
     instanceId,
     setInstanceId,
-    handleSubmit
+    handleSubmit,
+    handleLetterTypeChange,
+    employee, // Add employee object to return
+    nocFromDate,
+    setNocFromDate,
+    nocToDate,
+    setNocToDate,
+    permanentAddress,
+    setPermanentAddress,
+    currentAddress,
+    setCurrentAddress
   };
 }

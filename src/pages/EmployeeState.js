@@ -38,7 +38,7 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
     }
   }
   fetchLetterTypes();
-}, []);
+},[setLetterTypes]);
 
  const {
   letterType,
@@ -64,31 +64,64 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
   addressType,
   setAddressType,
   employee,
-} = useProofDetailsForm({ workflowState, setWorkflowState, instanceId, onSubmit});
+} = useProofDetailsForm({ instanceId, onSubmit});
 
 const [resourceType, setResourceType] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("🔍 EmployeeState useEffect triggered");
+    console.log("👤 Employee object:", employee);
+    console.log("🆔 Employee mEmpID:", employee?.mEmpID);
+    
     if (employee?.mEmpID) {
+      console.log("📞 Calling getEmpResourceType API with ID:", employee.mEmpID);
+      setLoading(true);
       getEmpResourceType(employee.mEmpID)
         .then((type) => {
+          console.log("✅ API Response - Resource Type:", type);
           setResourceType(type); // type will be 1 or 0
         })
-        .catch(console.error)
-        .finally(() => setLoading(false));
+        .catch((error) => {
+          console.error("❌ API Error:", error);
+        })
+        .finally(() => {
+          console.log("🏁 API call completed, setting loading to false");
+          setLoading(false);
+        });
+    } else {
+      console.log("⚠️ No employee mEmpID found, skipping API call");
+      setLoading(false);
     }
   }, [employee?.mEmpID]);
 
   
 
+  // Show loading state while checking access
+  if (loading) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h3>🔄 Checking Access...</h3>
+        <p>Verifying your eligibility to request a letter...</p>
+        <p><strong>Debug Info:</strong> Employee ID: {employee?.mEmpID || 'Not found'}</p>
+      </div>
+    );
+  }
+
+  // Show access denied if resourceType is 0
   if (resourceType === 0) {
     return (
       <div style={{ padding: '20px', color: 'red' }}>
-        <h3>Access Denied</h3>
+        <h3>❌ Access Denied</h3>
         <p>You are not eligible to request a letter.</p>
+        <p><strong>Debug Info:</strong> Resource Type: {resourceType}</p>
       </div>
     );
+  }
+
+  // Show access granted info if resourceType is 1
+  if (resourceType === 1) {
+    console.log("✅ Access granted - showing form");
   }
   return (
     <Box className="proof-details-container">
@@ -115,7 +148,7 @@ const [resourceType, setResourceType] = useState(null);
                 >
     
                   {letterTypes.map((type) => (
-                    <MenuItem key={type.Ikeyvalue} value={type.letterType}>
+                    <MenuItem key={type.lkeyvalue} value={type.letterType}>
                       {type.letterType}
                     </MenuItem>
                   ))}
@@ -158,8 +191,8 @@ const [resourceType, setResourceType] = useState(null);
           </Grid>
         </Box>
 
-        {letterType === 'Address Proof' && <AddressProof />}
-        {letterType === 'No Objection Certificate' && <NOC workflowState={workflowState} />}
+        {letterType === 'Address Proof'  && <AddressProof />}
+        {letterType === 'No Objection Certificate' && <NOC/>}
         {letterType === 'Office Correspondence Letter' && <OfficeCorrespondence />}
 
         <Box className="form-section">

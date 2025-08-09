@@ -17,7 +17,6 @@ export async function getLetterTypes() {
     return [];
   }
 }
-
 export async function getEmpResourceType(MEmpID) {
   try {
     const response = await fetch(`${baseURL}/api/HRLetter/GetEmpResourceType?MEmpID=${MEmpID}`, {
@@ -35,7 +34,7 @@ export async function getEmpResourceType(MEmpID) {
     console.log("Full API Response:", result);
 
     if (result.status) {
-      return result.data; // return only the resource type (e.g., 1)
+      return result.data; // return only the resource type (e.g., 1 or 0)
     } else {
       throw new Error(result.message || "Unknown error from server");
     }

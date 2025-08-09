@@ -24,7 +24,7 @@ export default function HRHeader() {
     manager: "Ravindra S R (06786669)",
     avatar: "/avatar.png"
   };
-  const [instanceId] = useState(() => `INST-${Date.now()}`); 
+  
 
   return (
     <>
