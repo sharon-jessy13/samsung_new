@@ -1,0 +1,316 @@
+/* Root container */
+.approve-container {
+  padding: 24px;
+  background-color: #F9FAFB;
+  font-family: 'Roboto', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Employee Header Section */
+.employee-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.employee-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+/* Employee Details Grid */
+.employee-details-grid {
+  margin-bottom: 20px;
+}
+
+.detail-section {
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.detail-section-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.detail-section-value {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* Header styles */
+.approve-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.approve-header-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Required Information Section */
+.required-info-section {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  padding: 24px;
+  background-color: white;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Section titles */
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e3f2fd;
+  padding-bottom: 8px;
+}
+
+/* Details grid */
+.details-grid {
+  margin-top: 16px;
+}
+
+/* Detail items */
+.detail-item {
+  margin-bottom: 16px;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #333;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #1976d2;
+  min-height: 20px;
+  word-wrap: break-word;
+}
+
+/* Action buttons */
+.action-buttons-section {
+  margin: 24px 0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Transfer Workflow Section */
+.transfer-workflow-section {
+  margin-top: 24px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.workflow-header {
+  display: flex;
+  align-items: center;
+}
+
+.approve-button {
+  background-color: #4caf50;
+  color: white;
+  text-transform: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+.approve-button:hover {
+  background-color: #45a049;
+}
+
+.reject-button {
+  background-color: #f44336;
+  color: white;
+  text-transform: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+.reject-button:hover {
+  background-color: #da190b;
+}
+
+.edit-button {
+  border-color: #1976d2;
+  color: #1976d2;
+  text-transform: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+.edit-button:hover {
+  background-color: #e3f2fd;
+  border-color: #1565c0;
+}
+
+.print-button {
+  border-color: #666;
+  color: #666;
+  text-transform: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+.print-button:hover {
+  background-color: #f5f5f5;
+  border-color: #333;
+  color: #333;
+}
+
+/* Status chips */
+.MuiChip-root {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dialog styles */
+.MuiDialog-paper {
+  border-radius: 12px;
+}
+
+.MuiDialogTitle-root {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.MuiDialogContent-root {
+  padding: 24px;
+}
+
+.MuiDialogActions-root {
+  padding: 16px 24px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .approve-container {
+    padding: 16px;
+  }
+  
+  .approve-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .approve-header-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-review-card .MuiCardContent-root {
+    padding: 20px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .action-buttons .MuiButton-root {
+    margin-bottom: 8px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .action-buttons {
+    display: none;
+  }
+  
+  .approve-container {
+    box-shadow: none;
+    background-color: white;
+  }
+  
+  .form-review-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+/* Animation for status changes */
+.MuiChip-root {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Enhanced visual hierarchy */
+.detail-value {
+  position: relative;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.detail-value:hover {
+  background-color: #e8f4fd;
+}
+
+/* Success and error states */
+.status-approved {
+  background-color: #e8f5e8;
+  border-left-color: #4caf50;
+}
+
+.status-rejected {
+  background-color: #ffebee;
+  border-left-color: #f44336;
+}
+
+.status-pending {
+  background-color: #fff8e1;
+  border-left-color: #ff9800;
+}

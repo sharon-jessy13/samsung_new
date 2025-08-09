@@ -1,0 +1,77 @@
+
+.form-section {
+  background-color: #F9FAFB; /* Keep same as Proof Details container */
+  padding: 24px;
+  border-radius: 12px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  margin-bottom: 32px;
+}
+
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 24px;
+}
+
+
+.letter-grid {
+  margin-top: 8px;
+}
+
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #555;
+  display: block;
+}
+
+
+.select-box .MuiOutlinedInput-root {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 0;
+  width: 415px;
+}
+
+.select-box .MuiOutlinedInput-notchedOutline {
+  border-color: #ccc;
+}
+
+.select-box .MuiInputBase-input {
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #333;
+  width: 415px;
+}
+
+/* White placeholder text on inputs/textareas */
+.select-box .MuiInputBase-input::placeholder {
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+
+.select-box .MuiSelect-select {
+  display: flex;
+  align-items: center;
+}
+
+
+@media (max-width: 600px) {
+  .form-section {
+    padding: 16px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .label {
+    font-size: 13px;
+  }
+}

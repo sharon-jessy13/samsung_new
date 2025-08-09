@@ -1,0 +1,118 @@
+/* Root container */
+.proof-details-container {
+  padding: 24px;
+  background-color: #F9FAFB; /* Match form section background */
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Header styles */
+.proof-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.proof-header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.proof-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.note-icon {
+  color: #1976d2;
+}
+
+.note-text {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Form section spacing */
+.form-section {
+  margin-bottom: 24px;
+}
+
+/* Typography and inputs */
+.label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+  color: #555;
+}
+
+.select-box .MuiSelect-select {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.select-box .MuiOutlinedInput-notchedOutline {
+  border-color: #ffffff;
+}
+
+.textarea {
+  width: 100%;
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  background-color: #ffffff;
+}
+
+
+.form-submit {
+  text-align: right;
+}
+
+.submit-button {
+  background-color: #1976d2;
+  color: #fff;
+  text-transform: none;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.submit-button:hover {
+  background-color: #125ea2;
+}
+
+/* View policies link */
+.view-policies {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  color: #666;
+}
+
+.policy-icon {
+  color: #1976d2;
+}
+
+/* Make placeholders white for better contrast on grey inputs */
+textarea::placeholder,
+input::placeholder,
+.MuiInputBase-input::placeholder {
+  color: #ffffff !important;
+  opacity: 1; /* Ensure full visibility across browsers */
+}
+.action-button{
+  text-align: right;
+}

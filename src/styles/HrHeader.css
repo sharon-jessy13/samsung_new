@@ -1,0 +1,74 @@
+.hr-header-container {
+  padding: 20px 30px;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.breadcrumb {
+  color: #202224;
+  font-size: 12px;
+  margin-bottom: 10px;
+  margin-left: 24px !important; /* left margin for breadcrumb */
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.initiate-text {
+  color: gray;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.clock-icon {
+  color: #00b0ff;
+}
+
+.employee-grid {
+  margin-top: 20px;
+}
+
+.employee-section {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-left: 24px;
+}
+
+/* Add left margin only for the employee details block */
+.employee-details {
+  margin-left: 15px;
+}
+
+.divider {
+  margin-left: 10px;
+  margin-right: 10px;
+  border-color: #e0e0e0;
+}
+.required-info-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 8px 0;
+  margin-left: 12px; /* left margin for Required Information */
+}
+
+.required-info-icon {
+  color: #00C853; /* Green clipboard */
+  width: 24px;
+  height: 26px;
+  
+  
+}
+
+.required-info-text {
+  font-weight: 700;
+  color: #202224;
+  font-size: 20px !important;
+  
+}
+
