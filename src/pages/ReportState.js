@@ -2,25 +2,23 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
-  Button,
   Grid,
   Paper,
   TextField,
-  MenuItem,
   Chip,
   Avatar,
   Divider,
-  IconButton
+  IconButton,
+  Button
 } from "@mui/material";
-import { ArrowBack, Assignment, SwapHoriz, Description, GetApp, PictureAsPdf } from '@mui/icons-material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowBack, Assignment, Description, GetApp, PictureAsPdf } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
 import { getHRLetterDetailsByInstanceID } from '../services/apiclient';
 
-export default function ApproveState() {
+export default function ReportState() {
   const { instanceId } = useParams();
   const [loading, setLoading] = useState(true);
   const [letterData, setLetterData] = useState(null);
-  const navigate = useNavigate();
 
   // ✅ Fetch data for given instanceId
   useEffect(() => {
@@ -28,12 +26,12 @@ export default function ApproveState() {
 
     const fetchLetterData = async () => {
       try {
-        console.log("📋 Fetching letter data for instance ID:", instanceId);
+        console.log("📋 ReportState: Fetching letter data for instance ID:", instanceId);
         const data = await getHRLetterDetailsByInstanceID(instanceId);
-        console.log("✅ Letter data received:", data);
+        console.log("✅ ReportState: Letter data received:", data);
         setLetterData(data);
       } catch (error) {
-        console.error("❌ Error fetching letter data:", error);
+        console.error("❌ ReportState: Error fetching letter data:", error);
       } finally {
         setLoading(false);
       }
@@ -42,70 +40,15 @@ export default function ApproveState() {
     fetchLetterData();
   }, [instanceId]);
 
-  // ✅ Handle Approve / Reject / Restart actions (without API call)
-  const handleAction = (status) => {
-    try {
-      console.log(`📋 Action taken: ${status} for instance ID: ${instanceId}`);
-      
-      // Update local state to reflect the action
-      if (letterData) {
-        setLetterData({
-          ...letterData,
-          status: status,
-          actionDate: new Date().toISOString(),
-          actionBy: 'Manager'
-        });
-      }
-
-      // Show success message
-      alert(`✅ Request ${status} successfully!`);
-      
-      // Navigate to report state after approval
-      if (status === 'Approve') {
-        setTimeout(() => {
-          navigate(`/report/${instanceId}`);
-        }, 1000);
-      }
-      
-    } catch (error) {
-      console.error("❌ Error handling action:", error);
-      alert("Failed to process action. Please try again.");
-    }
-  };
-
-  // ✅ Download attachment file (direct download without API)
-  const handleDownloadAttachment = () => {
-    try {
-      if (!letterData.attachmentUrl && !letterData.attachmentName) {
-        alert("No attachment available for download");
-        return;
-      }
-
-      // Direct file download using the file URL stored in letterData
-      const link = document.createElement('a');
-      link.href = letterData.attachmentUrl || letterData.attachmentPath || '#';
-      link.download = letterData.attachmentName || 'attachment.pdf';
-      link.target = '_blank'; // Open in new tab if direct download fails
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      console.log("✅ Attachment download initiated:", letterData.attachmentName);
-    } catch (error) {
-      console.error("❌ Error downloading attachment:", error);
-      alert("Failed to download attachment. Please try again.");
-    }
-  };
-
-  if (loading) return <Typography>Loading...</Typography>;
-  if (!letterData) return <Typography>No data found</Typography>;
+  if (loading) return <Typography>Loading report...</Typography>;
+  if (!letterData) return <Typography>No report data found</Typography>;
 
   return (
     <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', p: 2 }}>
       {/* Header Section */}
       <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 1, mb: 2 }}>
         <Typography variant="caption" sx={{ color: '#666' }}>
-          My Workspace &gt; HR Letter
+          My Workspace &gt; HR Letter &gt; Report
         </Typography>
         
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, mb: 2 }}>
@@ -113,7 +56,7 @@ export default function ApproveState() {
             <ArrowBack />
           </IconButton>
           <Typography variant="body2" sx={{ ml: 1 }}>
-            HR Letter Request - (HR Approval)
+            HR Letter Request - Report
           </Typography>
         </Box>
 
@@ -182,13 +125,16 @@ export default function ApproveState() {
             />
           </Grid>
 
-          {/* Conditional fields based on letter type */}
+          {/* Address Proof specific fields */}
           {letterData.letterType === 'Address Proof' && (
             <>
-              <Grid item xs={12} md={6}>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              <Grid item xs={12}>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
                   Personal Details
                 </Typography>
+              </Grid>
+              
+              <Grid item xs={12} md={6}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Permanent Address
                 </Typography>
@@ -198,8 +144,10 @@ export default function ApproveState() {
                   InputProps={{ readOnly: true }}
                   variant="outlined"
                   size="small"
-                  sx={{ mb: 2 }}
                 />
+              </Grid>
+              
+              <Grid item xs={12} md={6}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Current Address
                 </Typography>
@@ -209,8 +157,10 @@ export default function ApproveState() {
                   InputProps={{ readOnly: true }}
                   variant="outlined"
                   size="small"
-                  sx={{ mb: 2 }}
                 />
+              </Grid>
+              
+              <Grid item xs={12} md={6}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Letter required for Permanent or Current Address
                 </Typography>
@@ -229,7 +179,7 @@ export default function ApproveState() {
           {letterData.letterType === 'Office Correspondence Letter' && (
             <Grid item xs={12}>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                Office Address of Correspondence(Use ',' for separation)
+                Office Address of Correspondence
               </Typography>
               <TextField
                 fullWidth
@@ -248,7 +198,7 @@ export default function ApproveState() {
             <>
               <Grid item xs={12} md={6}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  Leave From *
+                  Leave From
                 </Typography>
                 <TextField
                   fullWidth
@@ -260,7 +210,7 @@ export default function ApproveState() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                  Leave To *
+                  Leave To
                 </Typography>
                 <TextField
                   fullWidth
@@ -271,7 +221,7 @@ export default function ApproveState() {
                 />
               </Grid>
               
-              {/* Attachment section for NOC */}
+              {/* Attachment section for NOC in ReportState */}
               <Grid item xs={12}>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                   Attachment
@@ -297,7 +247,15 @@ export default function ApproveState() {
                     <IconButton 
                       size="small" 
                       color="primary"
-                      onClick={handleDownloadAttachment}
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = letterData.attachmentUrl || letterData.attachmentPath || '#';
+                        link.download = letterData.attachmentName || 'attachment.pdf';
+                        link.target = '_blank';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
                       title="Download attachment"
                     >
                       <GetApp />
@@ -313,7 +271,7 @@ export default function ApproveState() {
           )}
 
           {/* Letter required for Reason */}
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
               Letter required for Reason
             </Typography>
@@ -327,71 +285,7 @@ export default function ApproveState() {
               size="small"
             />
           </Grid>
-
-          {/* Comment */}
-          <Grid item xs={12}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              Comment (Max 500 Chars)
-            </Typography>
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              value={letterData.comment}
-              InputProps={{ readOnly: true }}
-              variant="outlined"
-              size="small"
-            />
-          </Grid>
         </Grid>
-
-        {/* Action Buttons */}
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
-          <Button
-            variant="outlined"
-            color="inherit"
-            onClick={() => handleAction("Restart")}
-            sx={{ textTransform: 'none' }}
-          >
-            Restart
-          </Button>
-          <Button
-            variant="outlined"
-            color="inherit"
-            onClick={() => handleAction("Reject")}
-            sx={{ textTransform: 'none' }}
-          >
-            Reject
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => handleAction("Approve")}
-            sx={{ 
-              backgroundColor: '#1976d2',
-              textTransform: 'none',
-              '&:hover': { backgroundColor: '#1565c0' }
-            }}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Box>
-
-      {/* Transfer Workflow Section */}
-      <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 1, mb: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <SwapHoriz sx={{ color: '#1976d2', mr: 1 }} />
-            <Typography fontWeight="bold">Transfer Workflow</Typography>
-          </Box>
-          <IconButton 
-            size="small"
-            onClick={() => navigate(`/report/${instanceId}`)}
-            title="Go to Report State"
-          >
-            <ArrowBack sx={{ transform: 'rotate(180deg)' }} />
-          </IconButton>
-        </Box>
       </Box>
 
       {/* View Policies Section */}

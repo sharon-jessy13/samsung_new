@@ -35,14 +35,6 @@ export default function useProofDetailsForm(initialData) {
   const [letterTypeKey, setLetterTypeKey] = useState('');
   const [letterTypes, setLetterTypes] = useState([]);
 
-  // Employee data - this should match the employee object from HRHeader
-  const employee = {
-    mEmpID: 16843, // This should match the MempId used in handleSubmit
-    name: "Manoj Kandan M",
-    genId: "25504878",
-    email: "manoj.kandan@partner.samsung.com",
-    designation: "Outsourcing"
-  };
 
   // Fetch letter types
   useEffect(() => {
@@ -108,15 +100,6 @@ export default function useProofDetailsForm(initialData) {
     instanceId,
     setInstanceId,
     handleSubmit,
-    handleLetterTypeChange,
-    employee, // Add employee object to return
-    nocFromDate,
-    setNocFromDate,
-    nocToDate,
-    setNocToDate,
-    permanentAddress,
-    setPermanentAddress,
-    currentAddress,
-    setCurrentAddress
+    handleLetterTypeChange
   };
 }

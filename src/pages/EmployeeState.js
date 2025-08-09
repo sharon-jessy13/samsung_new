@@ -69,15 +69,22 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
 const [resourceType, setResourceType] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Employee data for API calls
+  const employeeData = {
+    mEmpID: 16843, // This should match the MempId used in form submission
+    name: "Manoj Kandan M",
+    genId: "25504878"
+  };
+
   useEffect(() => {
     console.log("🔍 EmployeeState useEffect triggered");
-    console.log("👤 Employee object:", employee);
-    console.log("🆔 Employee mEmpID:", employee?.mEmpID);
+    console.log("👤 Employee object:", employeeData);
+    console.log("🆔 Employee mEmpID:", employeeData?.mEmpID);
     
-    if (employee?.mEmpID) {
-      console.log("📞 Calling getEmpResourceType API with ID:", employee.mEmpID);
+    if (employeeData?.mEmpID) {
+      console.log("📞 Calling getEmpResourceType API with ID:", employeeData.mEmpID);
       setLoading(true);
-      getEmpResourceType(employee.mEmpID)
+      getEmpResourceType(employeeData.mEmpID)
         .then((type) => {
           console.log("✅ API Response - Resource Type:", type);
           setResourceType(type); // type will be 1 or 0
@@ -93,7 +100,7 @@ const [resourceType, setResourceType] = useState(null);
       console.log("⚠️ No employee mEmpID found, skipping API call");
       setLoading(false);
     }
-  }, [employee?.mEmpID]);
+  }, [employeeData?.mEmpID]);
 
   
 

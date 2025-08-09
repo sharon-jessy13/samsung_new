@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import HRHeader from "./components/HrHeader";
 import ApproveState from './pages/ApproveState';
+import ReportState from './pages/ReportState';
 
 function App() {
   return (
@@ -14,6 +15,9 @@ function App() {
 
         {/* Approval page (for Manager/HR) */}
         <Route path="/approve/:instanceId" element={<ApproveState/>} />
+        
+        {/* Report page (after approval) */}
+        <Route path="/report/:instanceId" element={<ReportState/>} />
       </Routes>
     </Router>
   );
