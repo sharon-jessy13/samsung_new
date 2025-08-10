@@ -64,66 +64,6 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
   handleSubmit,
 } = useProofDetailsForm({ instanceId, onSubmit});
 
-const [resourceType, setResourceType] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Employee data for API calls - will be populated after user enters Employee ID
-  const employeeData = {
-    mEmpID: mempId ? parseInt(mempId) : null, // Use user-entered Employee ID
-    name: "", // Will be fetched from API after access check
-    genId: ""
-  };
-
-  useEffect(() => {
-    // Only make API call if Employee ID is available (after user enters it)
-    if (employeeData?.mEmpID) {
-      console.log("📞 Calling getEmpResourceType API with ID:", employeeData.mEmpID);
-      setLoading(true);
-      getEmpResourceType(employeeData.mEmpID)
-        .then((type) => {
-          console.log("✅ API Response - Resource Type:", type);
-          setResourceType(type); // type will be 1 or 0
-        })
-        .catch((error) => {
-          console.error("❌ API Error:", error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      // No Employee ID yet - this is expected before user enters it
-      setLoading(false);
-    }
-  }, [employeeData?.mEmpID]);
-
-  
-
-  // Show loading state while checking access
-  if (loading) {
-    return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h3>🔄 Checking Access...</h3>
-        <p>Verifying your eligibility to request a letter...</p>
-        <p><strong>Debug Info:</strong> Employee ID: {mempId || 'Not entered'}</p>
-      </div>
-    );
-  }
-
-  // Show access denied if resourceType is 0
-  if (resourceType === 0) {
-    return (
-      <div style={{ padding: '20px', color: 'red' }}>
-        <h3>❌ Access Denied</h3>
-        <p>You are not eligible to request a letter.</p>
-        <p><strong>Debug Info:</strong> Resource Type: {resourceType}</p>
-      </div>
-    );
-  }
-
-  // Show access granted info if resourceType is 1
-  if (resourceType === 1) {
-    console.log("✅ Access granted - showing form");
-  }
   return (
     <Box className="proof-details-container">
       <Box className="proof-header">
@@ -148,9 +88,14 @@ const [resourceType, setResourceType] = useState(null);
                 required
                 placeholder="Enter your Employee ID"
                 value={mempId}
-                onChange={(e) => setMempId(e.target.value)}
+                onChange={(e) => {
+                  const digitsOnly = e.target.value.replace(/\D/g, '');
+                  setMempId(digitsOnly);
+                }}
                 className="input-field"
-                type="number"
+                type="text"
+                autoComplete='off'
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 10 }}
               />
             </Grid>
             <Grid item xs={12} sm={6} style={{display: 'flex', alignItems: 'end'}}>
