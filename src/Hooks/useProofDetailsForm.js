@@ -46,8 +46,8 @@ export default function useProofDetailsForm(initialData) {
 
   // Check employee access permission
   const handleCheckAccess = async () => {
-    if (!mempId) {
-      alert("Please enter your Employee ID");
+    if (!mempId || mempId === '0' || parseInt(mempId, 10) === 0) {
+      alert("Please enter a valid Employee ID (non-zero)");
       return;
     }
 
@@ -56,18 +56,20 @@ export default function useProofDetailsForm(initialData) {
       console.log(`🔍 Checking access for Employee ID: ${mempId}`);
       
       // Call API to check if employee has access
-      const resourceType = await getEmpResourceType(mempId);
+      const resourceType = await getEmpResourceType(parseInt(mempId, 10));
       console.log("Resource Type:", resourceType);
-      
-      if (resourceType !== null && resourceType !== undefined) {
+
+      // Only allow access when API explicitly returns 1
+      if (resourceType === 1) {
         setHasAccess(true);
         setAccessChecked(true);
         alert("✅ Access granted! You can now fill out the HR letter request form.");
-        
+
         // Fetch letter types after access is granted
         const letterTypesData = await getLetterTypes();
         setLetterTypes(letterTypesData);
       } else {
+        // Covers 0, null, undefined, or any non-1 value
         setHasAccess(false);
         setAccessChecked(true);
         alert("❌ Access denied. You are not authorized to submit HR letter requests.");
@@ -108,8 +110,8 @@ export default function useProofDetailsForm(initialData) {
       setIsSubmitting(true);
       
       // Validate required fields
-      if (!mempId) {
-        alert("Please enter your Employee ID");
+      if (!mempId || mempId === '0' || parseInt(mempId, 10) === 0) {
+        alert("Please enter a valid Employee ID (non-zero)");
         return;
       }
       
@@ -124,6 +126,8 @@ export default function useProofDetailsForm(initialData) {
       }
 
       const generatedInstanceId = Math.floor(Math.random() * 90000000) + 10000000; // Generate random 8-digit number 
+      // Persist generated ID immediately so UI can show something even before API responds
+      setInstanceId(generatedInstanceId);
       const payload = {
         lrid: 0,
         instanceID: generatedInstanceId,
@@ -153,6 +157,8 @@ export default function useProofDetailsForm(initialData) {
       if (response && (response.data?.instanceID || response.instanceID)) {
         const responseInstanceId = response.data?.instanceID || response.instanceID;
         console.log("📋 Instance ID from API response:", responseInstanceId);
+        // Overwrite with server-confirmed ID
+        setInstanceId(responseInstanceId);
       }
       
       // Additional success handling if API returns specific status

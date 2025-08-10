@@ -90,7 +90,13 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
                 value={mempId}
                 onChange={(e) => {
                   const digitsOnly = e.target.value.replace(/\D/g, '');
-                  setMempId(digitsOnly);
+                  // Treat '0' as invalid (clear it) and remove leading zeros
+                  if (digitsOnly === '0') {
+                    setMempId('');
+                  } else {
+                    const normalized = digitsOnly.replace(/^0+/, '');
+                    setMempId(normalized);
+                  }
                 }}
                 className="input-field"
                 type="text"
@@ -102,7 +108,7 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
               <Button
                 variant="contained"
                 onClick={handleCheckAccess}
-                disabled={!mempId || isCheckingAccess}
+                disabled={!mempId || mempId === '0' || isCheckingAccess}
                 className="check-access-button"
               >
                 {isCheckingAccess ? "Checking Access..." : "Check Access"}
