@@ -45,19 +45,33 @@ export async function getEmpResourceType(MEmpID) {
 }
 
 export async function updateHRLetterDetails(data) {
-  const response = await fetch('http://107.108.5.184:66/api/HRLetter/UpdateDetails', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    console.log(" Sending payload to API:", data);
+    
+    const response = await fetch('http://107.108.5.184:66/api/HRLetter/UpdateDetails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
-  if (!response.ok) {
-    throw new Error('Failed to update HR letter details');
+    const result = await response.json();
+    console.log(" API Response:", result);
+
+    if (!response.ok) {
+      // Extract detailed error information from the response
+      const errorMessage = result.message || result.error || `HTTP ${response.status}: ${response.statusText}`;
+      const validationErrors = result.errors || result.details || '';
+      
+      throw new Error(`${errorMessage}${validationErrors ? ` - ${JSON.stringify(validationErrors)}` : ''}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error(" API Error:", error);
+    throw error;
   }
-
-  return await response.json();
 }
 
 export async function getHRLetterDetailsByInstanceID(instanceId) {

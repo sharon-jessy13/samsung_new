@@ -64,23 +64,26 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
   addressType,
   setAddressType,
   employee,
+  mempId,
+  setMempId,
+  hasAccess,
+  isCheckingAccess,
+  accessChecked,
+  handleCheckAccess,
 } = useProofDetailsForm({ instanceId, onSubmit});
 
 const [resourceType, setResourceType] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Employee data for API calls
+  // Employee data for API calls - will be populated after user enters Employee ID
   const employeeData = {
-    mEmpID: 16843, // This should match the MempId used in form submission
-    name: "Manoj Kandan M",
-    genId: "25504878"
+    mEmpID: mempId ? parseInt(mempId) : null, // Use user-entered Employee ID
+    name: "", // Will be fetched from API after access check
+    genId: ""
   };
 
   useEffect(() => {
-    console.log("🔍 EmployeeState useEffect triggered");
-    console.log("👤 Employee object:", employeeData);
-    console.log("🆔 Employee mEmpID:", employeeData?.mEmpID);
-    
+    // Only make API call if Employee ID is available (after user enters it)
     if (employeeData?.mEmpID) {
       console.log("📞 Calling getEmpResourceType API with ID:", employeeData.mEmpID);
       setLoading(true);
@@ -93,11 +96,10 @@ const [resourceType, setResourceType] = useState(null);
           console.error("❌ API Error:", error);
         })
         .finally(() => {
-          console.log("🏁 API call completed, setting loading to false");
           setLoading(false);
         });
     } else {
-      console.log("⚠️ No employee mEmpID found, skipping API call");
+      // No Employee ID yet - this is expected before user enters it
       setLoading(false);
     }
   }, [employeeData?.mEmpID]);
@@ -140,8 +142,49 @@ const [resourceType, setResourceType] = useState(null);
         </Box>
       </Box>
 
-      <form onSubmit={handleSubmit}>
+      {/* Step 1: Employee ID Entry and Access Check */}
+      {!hasAccess && (
         <Box className="form-section">
+          <Typography variant="h6" className="section-title">
+            Employee Authentication
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography className="label">Employee ID *</Typography>
+              <TextField
+                fullWidth
+                required
+                placeholder="Enter your Employee ID"
+                value={mempId}
+                onChange={(e) => setMempId(e.target.value)}
+                className="input-field"
+                type="number"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} style={{display: 'flex', alignItems: 'end'}}>
+              <Button
+                variant="contained"
+                onClick={handleCheckAccess}
+                disabled={!mempId || isCheckingAccess}
+                className="check-access-button"
+              >
+                {isCheckingAccess ? "Checking Access..." : "Check Access"}
+              </Button>
+            </Grid>
+          </Grid>
+          
+          {accessChecked && !hasAccess && (
+            <Typography color="error" style={{marginTop: '10px'}}>
+              ❌ Access denied. Please contact HR if you believe this is an error.
+            </Typography>
+          )}
+        </Box>
+      )}
+
+      {/* Step 2: HR Letter Request Form - Only show if access is granted */}
+      {hasAccess && (
+        <form onSubmit={handleSubmit}>
+          <Box className="form-section">
           <Grid container spacing={2} className="letter-grid">
 
             <Grid item xs={12} sm={4}>
@@ -238,7 +281,8 @@ const [resourceType, setResourceType] = useState(null);
             </Button>
           </Box>
         
-      </form>
+        </form>
+      )}
 
       <Box className="view-policies">
         <DescriptionOutlinedIcon className="policy-icon" />
