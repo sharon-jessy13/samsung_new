@@ -1,8 +1,7 @@
 import React , {useState} from "react";
 import { Box,Typography,TextareaAutosize } from "@mui/material";
 
-function OfficeCorrespondence(){
-    const [officeAddress, setOfficeAddress] = useState('');
+function OfficeCorrespondence({ officeAddress, setOfficeAddress }){
     return(
         <Box className="form-section">
             <Typography className="label">Office Address of Correspondence (Use ‘ , ’ for separation)</Typography>

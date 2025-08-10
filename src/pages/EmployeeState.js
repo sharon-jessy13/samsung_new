@@ -26,50 +26,42 @@ import OfficeCorrespondence from '../components/OfficeCorrespondence';
 
 
 function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit }) {
- 
-  const [letterTypes, setLetterTypes] = React.useState([]);
-  React.useEffect(() => {
-  async function fetchLetterTypes() {
-    try {
-      const data = await getLetterTypes();
-      setLetterTypes(data);
-    } catch (error) {
-      console.error("Failed to fetch letter types:", error);
-    }
-  }
-  fetchLetterTypes();
-},[setLetterTypes]);
 
  const {
+  letterTypes,
   letterType,
-  isSubmitted,
+  setLetterType,
+  letterTypeKey,
+  setLetterTypeKey,
+  addressType,
+  setAddressType,
   reason,
-  comment,
-  nocFromDate,
-  nocToDate,
-  isViewMode,
-  showCommentSection,
-  handleLetterTypeChange,
-  handleSubmit,
-  handleApproveClick,
   setReason,
+  comment,
   setComment,
-  setNocFromDate,
-  setNocToDate,
-  showActionButtons,
   permanentAddress,
   setPermanentAddress,
   currentAddress,
   setCurrentAddress,
-  addressType,
-  setAddressType,
-  employee,
+  nocFromDate,
+  setNocFromDate,
+  nocToDate,
+  setNocToDate,
+  numberOfCopies,
+  setNumberOfCopies,
+  officeAddress,
+  setOfficeAddress,
+  placeOfTravel,
+  setPlaceOfTravel,
   mempId,
   setMempId,
   hasAccess,
   isCheckingAccess,
   accessChecked,
   handleCheckAccess,
+  isSubmitting,
+  handleLetterTypeChange,
+  handleSubmit,
 } = useProofDetailsForm({ instanceId, onSubmit});
 
 const [resourceType, setResourceType] = useState(null);
@@ -112,7 +104,7 @@ const [resourceType, setResourceType] = useState(null);
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h3>🔄 Checking Access...</h3>
         <p>Verifying your eligibility to request a letter...</p>
-        <p><strong>Debug Info:</strong> Employee ID: {employee?.mEmpID || 'Not found'}</p>
+        <p><strong>Debug Info:</strong> Employee ID: {mempId || 'Not entered'}</p>
       </div>
     );
   }
@@ -194,7 +186,7 @@ const [resourceType, setResourceType] = useState(null);
                   value={letterType}
                   onChange={handleLetterTypeChange}
                   className="select-box"
-                  disabled={isViewMode}
+
                 >
     
                   {letterTypes.map((type) => (
@@ -218,7 +210,7 @@ const [resourceType, setResourceType] = useState(null);
                   onChange={(e) => setNocFromDate(e.target.value)}
                   className="select-box"
                   InputLabelProps={{ shrink: true }}
-                  disabled={isViewMode}
+
                 />
               </Grid>
             )}
@@ -234,50 +226,98 @@ const [resourceType, setResourceType] = useState(null);
                   onChange={(e) => setNocToDate(e.target.value)}
                   className="select-box"
                   InputLabelProps={{ shrink: true }}
-                  disabled={isViewMode}
+
                 />
               </Grid>
             )}
           </Grid>
         </Box>
 
-        {letterType === 'Address Proof'  && <AddressProof />}
-        {letterType === 'No Objection Certificate' && <NOC/>}
-        {letterType === 'Office Correspondence Letter' && <OfficeCorrespondence />}
-
-        <Box className="form-section">
-          <Typography className="label">Letter required for (Reason)</Typography>
-          <TextareaAutosize
-            required
-            minRows={3}
-            placeholder="XXX-XXX-XX-XXXX-X"
-            className="textarea"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
+        {letterType === 'Address Proof'  && (
+          <AddressProof 
+            permanentAddress={permanentAddress}
+            setPermanentAddress={setPermanentAddress}
+            currentAddress={currentAddress}
+            setCurrentAddress={setCurrentAddress}
+            addressType={addressType}
+            setAddressType={setAddressType}
           />
-        </Box>
+        )}
+        {letterType === 'No Objection Certificate' && <NOC/>}
+        {letterType === 'Office Correspondence Letter' && (
+          <OfficeCorrespondence 
+            officeAddress={officeAddress}
+            setOfficeAddress={setOfficeAddress}
+          />
+        )}
 
-        
+        {/* Additional fields for specific letter types */}
+        {letterType === 'Office Correspondence Letter' && (
           <Box className="form-section">
-            <Typography className="label">Comment (Max 500 Chars)</Typography>
-            <TextareaAutosize
-              minRows={5}
-              maxRows={10}
-              placeholder="Enter your comment here..."
-              maxLength={500}
-              className="textarea"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              disabled={isViewMode}
+            <Typography className="label">Place of Travel</Typography>
+            <TextField
+              fullWidth
+              placeholder="Enter place of travel"
+              value={placeOfTravel}
+              onChange={(e) => setPlaceOfTravel(e.target.value)}
+              className="select-box"
             />
           </Box>
+        )}
+
+        <Box className="form-section">
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography className="label">Letter required for (Reason)</Typography>
+              <TextareaAutosize
+                required
+                minRows={3}
+                placeholder="Enter reason for the letter request"
+                className="textarea"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography className="label">Number of Copies</Typography>
+              <TextField
+                type="number"
+                fullWidth
+                placeholder="Enter number of copies needed"
+                value={numberOfCopies}
+                onChange={(e) => setNumberOfCopies(parseInt(e.target.value) || 1)}
+                className="select-box"
+                inputProps={{ min: 1, max: 10 }}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Box className="form-section">
+          <Typography className="label">Comment (Max 500 Chars)</Typography>
+          <TextareaAutosize
+            minRows={5}
+            maxRows={10}
+            placeholder="Enter your comment here..."
+            maxLength={500}
+            className="textarea"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </Box>
         
 
 
         
           <Box className="form-submit">
-            <Button variant="contained" type="submit" className="submit-button" >
-              Submit
+            <Button 
+              variant="contained" 
+              type="submit" 
+              className="submit-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
             </Button>
           </Box>
         

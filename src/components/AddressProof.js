@@ -10,10 +10,14 @@ import {
   Select,
 } from "@mui/material";
 
-function Addressproof() {
-  const [permanentAddress, setPermanentAddress] = useState("");
-  const [currentAddress, setCurrentAddress] = useState("");
-  const [addressChoice, setAddressChoice] = useState("");
+function Addressproof({
+  permanentAddress,
+  setPermanentAddress,
+  currentAddress,
+  setCurrentAddress,
+  addressType,
+  setAddressType
+}) {
 
   return (
     <Box className="form-section"> 
@@ -45,8 +49,8 @@ function Addressproof() {
               Letter required for Permanent or Current Address
             </Typography>
             <Select
-              value={addressChoice}
-              onChange={(e) => setAddressChoice(e.target.value)}
+              value={addressType}
+              onChange={(e) => setAddressType(e.target.value)}
               className="select-box"
             >
               <MenuItem value="Permanent">Permanent</MenuItem>

@@ -13,7 +13,7 @@ import { ArrowBack, Assignment, SwapHoriz, Description, GetApp, PictureAsPdf } f
 import { useNavigate, useParams } from 'react-router-dom';
 import { getHRLetterDetailsByInstanceID } from '../services/apiclient';
 
-export default function ApproveState() {
+function ApproveState() {
   const { instanceId } = useParams();
   const [loading, setLoading] = useState(true);
   const [letterData, setLetterData] = useState(null);
@@ -21,16 +21,33 @@ export default function ApproveState() {
 
   // ✅ Fetch data for given instanceId
   useEffect(() => {
-    if (!instanceId) return;
+    if (!instanceId) {
+      console.log("⚠️ No instance ID provided");
+      setLoading(false);
+      return;
+    }
 
     const fetchLetterData = async () => {
       try {
         console.log("📋 Fetching letter data for instance ID:", instanceId);
         const data = await getHRLetterDetailsByInstanceID(instanceId);
         console.log("✅ Letter data received:", data);
-        setLetterData(data);
+        
+        if (data && data.status !== false) {
+          setLetterData(data);
+        } else {
+          console.error("❌ No valid data found for instance ID:", instanceId);
+          setLetterData(null);
+        }
       } catch (error) {
         console.error("❌ Error fetching letter data:", error);
+        
+        // Handle specific error cases
+        if (error.message.includes('400')) {
+          console.error("❌ Instance ID not found or invalid:", instanceId);
+        }
+        
+        setLetterData(null);
       } finally {
         setLoading(false);
       }
@@ -94,8 +111,33 @@ export default function ApproveState() {
     }
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (!letterData) return <Typography>No data found</Typography>;
+  if (loading) return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+      <Typography variant="h6">Loading letter details...</Typography>
+    </Box>
+  );
+  
+  if (!letterData) return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', p: 4 }}>
+      <Typography variant="h5" color="error" gutterBottom>
+        ❌ Letter Not Found
+      </Typography>
+      <Typography variant="body1" color="textSecondary" align="center">
+        No letter data found for Instance ID: <strong>{instanceId}</strong>
+      </Typography>
+      <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+        This could mean:
+      </Typography>
+      <ul style={{ textAlign: 'left', marginTop: '8px' }}>
+        <li>The instance ID is invalid or doesn't exist</li>
+        <li>The letter request hasn't been submitted yet</li>
+        <li>There was an error in the submission process</li>
+      </ul>
+      <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+        Please check the instance ID and try again, or submit a new letter request.
+      </Typography>
+    </Box>
+  );
 
   return (
     <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', p: 2 }}>
@@ -403,3 +445,5 @@ export default function ApproveState() {
     </Box>
   );
 }
+
+export default ApproveState;

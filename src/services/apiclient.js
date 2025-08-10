@@ -67,6 +67,31 @@ export async function updateHRLetterDetails(data) {
       throw new Error(`${errorMessage}${validationErrors ? ` - ${JSON.stringify(validationErrors)}` : ''}`);
     }
 
+    // Check if API returns status: false (business logic failure)
+    if (result && result.status === false) {
+      console.error(" API returned status: false");
+      console.error(" Error message:", result.message || 'No error message provided');
+      console.error(" Error details:", result.errors || result.details || 'No error details provided');
+      
+      // Check if instance ID is available even with status: false
+      if (result.data && result.data.instanceID) {
+        console.log("📋 Instance ID available despite status: false -", result.data.instanceID);
+      } else if (result.instanceID) {
+        console.log("📋 Instance ID available despite status: false -", result.instanceID);
+      }
+      
+      // Create error with instance ID included if available
+      const errorMsg = result.message || 'API request failed';
+      const errorDetails = result.errors || result.details || '';
+      const instanceId = result.data?.instanceID || result.instanceID || null;
+      
+      const error = new Error(`${errorMsg}${errorDetails ? ` - ${JSON.stringify(errorDetails)}` : ''}`);
+      error.instanceId = instanceId; // Attach instance ID to error object
+      error.apiResponse = result; // Attach full response for debugging
+      
+      throw error;
+    }
+
     return result;
   } catch (error) {
     console.error(" API Error:", error);
@@ -76,6 +101,8 @@ export async function updateHRLetterDetails(data) {
 
 export async function getHRLetterDetailsByInstanceID(instanceId) {
   try {
+    console.log(`🔍 Fetching instance details for ID: ${instanceId}`);
+    
     const response = await fetch(`${baseURL}/api/HRLetter/GetHRLetterDetailsByInstanceID?InstanceID=${instanceId}`, {
       method: 'GET',
       headers: {
@@ -83,14 +110,36 @@ export async function getHRLetterDetailsByInstanceID(instanceId) {
       }
     });
 
+    console.log(`📡 Response status: ${response.status} ${response.statusText}`);
+
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      let errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
+      
+      // Add specific error messages for common status codes
+      if (response.status === 400) {
+        errorMessage += ` (Instance ID '${instanceId}' not found or invalid)`;
+      } else if (response.status === 404) {
+        errorMessage += ` (API endpoint not found)`;
+      } else if (response.status === 500) {
+        errorMessage += ` (Server error)`;
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
+    console.log("📥 Raw API response:", data);
+    
+    // Check if API returns data in expected format
+    if (data && data.status !== undefined) {
+      console.log("✅ API response has status field:", data.status);
+      return data.status ? data.data : data; // Return data.data if status is true, otherwise return full response
+    }
+    
     return data;
   } catch (error) {
-    console.error('Error fetching instance details:', error);
+    console.error('❌ Error fetching instance details:', error);
+    console.error('❌ Error details:', error.message);
     return null;
   }
 }

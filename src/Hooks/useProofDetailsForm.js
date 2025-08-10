@@ -27,6 +27,7 @@ export default function useProofDetailsForm(initialData) {
   const [hasAccess, setHasAccess] = useState(false); // Access permission status
   const [isCheckingAccess, setIsCheckingAccess] = useState(false); // Loading state for access check
   const [accessChecked, setAccessChecked] = useState(false); // Whether access check has been performed
+  const [isSubmitting, setIsSubmitting] = useState(false); // Prevent multiple submissions
 
 
   // Fetch letter types
@@ -97,7 +98,15 @@ export default function useProofDetailsForm(initialData) {
 
   // Submit form
   const handleSubmit = async () => {
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      console.log("⚠️ Form is already being submitted, ignoring duplicate submission");
+      return;
+    }
+
     try {
+      setIsSubmitting(true);
+      
       // Validate required fields
       if (!mempId) {
         alert("Please enter your Employee ID");
@@ -140,9 +149,17 @@ export default function useProofDetailsForm(initialData) {
       alert("✅ Form submitted successfully!");
       setIsSubmitted(true);
       
+      // Log instance ID if available in response
+      if (response && (response.data?.instanceID || response.instanceID)) {
+        const responseInstanceId = response.data?.instanceID || response.instanceID;
+        console.log("📋 Instance ID from API response:", responseInstanceId);
+      }
+      
       // Additional success handling if API returns specific status
       if (response && response.status) {
         console.log("HR Letter details updated successfully in backend");
+      } else if (response && response.status === false) {
+        console.log("⚠️ API returned status: false, but form was submitted");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -155,6 +172,8 @@ export default function useProofDetailsForm(initialData) {
       } else {
         alert(`❌ Error: ${error.message || 'Unknown error occurred'}`);
       }
+    } finally {
+      setIsSubmitting(false); // Reset submission state
     }
   };
 
@@ -162,12 +181,28 @@ export default function useProofDetailsForm(initialData) {
     letterTypes,
     letterType,
     setLetterType,
+    letterTypeKey,
+    setLetterTypeKey,
     addressType,
     setAddressType,
     reason,
     setReason,
     comment,
     setComment,
+    permanentAddress,
+    setPermanentAddress,
+    currentAddress,
+    setCurrentAddress,
+    nocFromDate,
+    setNocFromDate,
+    nocToDate,
+    setNocToDate,
+    numberOfCopies,
+    setNumberOfCopies,
+    officeAddress,
+    setOfficeAddress,
+    placeOfTravel,
+    setPlaceOfTravel,
     instanceId,
     setInstanceId,
     mempId,
@@ -176,6 +211,7 @@ export default function useProofDetailsForm(initialData) {
     isCheckingAccess,
     accessChecked,
     handleCheckAccess,
+    isSubmitting,
     handleSubmit,
     handleLetterTypeChange
   };
