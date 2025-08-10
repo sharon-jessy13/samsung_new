@@ -16,17 +16,28 @@ import { getHRLetterDetailsByInstanceID } from '../services/apiclient';
 
 export default function ReportState() {
   const { instanceId } = useParams();
+  // Normalize instanceId to digits only (handles cases like ":12345678")
+  const cleanedInstanceId = String(instanceId || '')
+    .trim()
+    .replace(/\D/g, '');
   const [loading, setLoading] = useState(true);
   const [letterData, setLetterData] = useState(null);
 
   // ✅ Fetch data for given instanceId
   useEffect(() => {
-    if (!instanceId) return;
+    if (!cleanedInstanceId) {
+      console.log('⚠️ ReportState: No valid instance ID provided');
+      setLoading(false);
+      return;
+    }
 
     const fetchLetterData = async () => {
       try {
-        console.log("📋 ReportState: Fetching letter data for instance ID:", instanceId);
-        const data = await getHRLetterDetailsByInstanceID(instanceId);
+        if (cleanedInstanceId !== String(instanceId)) {
+          console.warn('⚠️ ReportState: Route instanceId contained non-digits, using cleaned ID:', cleanedInstanceId);
+        }
+        console.log("📋 ReportState: Fetching letter data for instance ID:", cleanedInstanceId);
+        const data = await getHRLetterDetailsByInstanceID(cleanedInstanceId);
         console.log("✅ ReportState: Letter data received:", data);
         setLetterData(data);
       } catch (error) {
@@ -37,10 +48,10 @@ export default function ReportState() {
     };
 
     fetchLetterData();
-  }, [instanceId]);
+  }, [cleanedInstanceId]);
 
   if (loading) return <Typography>Loading report...</Typography>;
-  if (!letterData) return <Typography>No report data found</Typography>;
+  if (!letterData) return <Typography>No report data found for Instance ID: {cleanedInstanceId || instanceId}</Typography>;
 
   return (
     <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', p: 2 }}>
