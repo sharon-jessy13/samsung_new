@@ -107,24 +107,22 @@ export default function useProofDetailsForm(initialData) {
     }
 
     try {
-      setIsSubmitting(true);
-      
-      // Validate required fields
+      // Validate required fields BEFORE locking submit state
       if (!mempId || mempId === '0' || parseInt(mempId, 10) === 0) {
         alert("Please enter a valid Employee ID (non-zero)");
-        return;
+        return null;
       }
-      
       if (!letterType) {
         alert("Please select a letter type");
-        return;
+        return null;
       }
-      
       if (!letterTypeKey) {
         alert("Letter type key is missing. Please select a valid letter type.");
-        return;
+        return null;
       }
 
+      setIsSubmitting(true);
+      
       const generatedInstanceId = Math.floor(Math.random() * 90000000) + 10000000; // Generate random 8-digit number 
       // Persist generated ID immediately so UI can show something even before API responds
       setInstanceId(generatedInstanceId);
@@ -153,13 +151,15 @@ export default function useProofDetailsForm(initialData) {
       alert("✅ Form submitted successfully!");
       setIsSubmitted(true);
       
-      // Log instance ID if available in response
-      if (response && (response.data?.instanceID || response.instanceID)) {
-        const responseInstanceId = response.data?.instanceID || response.instanceID;
+      // Determine final instance ID (prefer server-confirmed ID)
+      const responseInstanceId = response && (response.data?.instanceID || response.instanceID);
+      const finalId = responseInstanceId || generatedInstanceId;
+      if (responseInstanceId) {
         console.log("📋 Instance ID from API response:", responseInstanceId);
-        // Overwrite with server-confirmed ID
-        setInstanceId(responseInstanceId);
+      } else {
+        console.log("ℹ️ Using locally generated Instance ID (no ID returned by API):", finalId);
       }
+      setInstanceId(finalId);
       
       // Additional success handling if API returns specific status
       if (response && response.status) {
@@ -167,6 +167,20 @@ export default function useProofDetailsForm(initialData) {
       } else if (response && response.status === false) {
         console.log("⚠️ API returned status: false, but form was submitted");
       }
+
+      // Immediately verify by fetching details with the final instance ID
+      try {
+        const verify = await getHRLetterDetailsByInstanceID(finalId);
+        console.log("🔎 Verify after POST:", verify);
+        if (!verify || verify.status === false || verify.data == null) {
+          console.warn("⚠️ Verification: No details found for Instance ID:", finalId);
+        }
+      } catch (verifyErr) {
+        console.error("❌ Verification GET failed:", verifyErr);
+      }
+
+      // Return the final ID to caller (for navigation or display)
+      return finalId;
     } catch (error) {
       console.error("Error submitting form:", error);
       
@@ -178,6 +192,7 @@ export default function useProofDetailsForm(initialData) {
       } else {
         alert(`❌ Error: ${error.message || 'Unknown error occurred'}`);
       }
+      
     } finally {
       setIsSubmitting(false); // Reset submission state
     }
