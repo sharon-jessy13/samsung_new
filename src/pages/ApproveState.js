@@ -15,13 +15,17 @@ import { getHRLetterDetailsByInstanceID } from '../services/apiclient';
 
 function ApproveState() {
   const { instanceId } = useParams();
+  // Normalize instanceId to digits only (guards against ":123" or stray characters)
+  const cleanedInstanceId = String(instanceId || '')
+    .trim()
+    .replace(/\D/g, '');
   const [loading, setLoading] = useState(true);
   const [letterData, setLetterData] = useState(null);
   const navigate = useNavigate();
 
   // ✅ Fetch data for given instanceId
   useEffect(() => {
-    if (!instanceId) {
+    if (!cleanedInstanceId) {
       console.log("⚠️ No instance ID provided");
       setLoading(false);
       return;
@@ -29,14 +33,17 @@ function ApproveState() {
 
     const fetchLetterData = async () => {
       try {
-        console.log("📋 Fetching letter data for instance ID:", instanceId);
-        const data = await getHRLetterDetailsByInstanceID(instanceId);
+        if (cleanedInstanceId !== String(instanceId)) {
+          console.warn("⚠️ Route instanceId contained non-digits, using cleaned ID:", cleanedInstanceId);
+        }
+        console.log("📋 Fetching letter data for instance ID:", cleanedInstanceId);
+        const data = await getHRLetterDetailsByInstanceID(cleanedInstanceId);
         console.log("✅ Letter data received:", data);
         
         if (data && data.status !== false) {
           setLetterData(data);
         } else {
-          console.error("❌ No valid data found for instance ID:", instanceId);
+          console.error("❌ No valid data found for instance ID:", cleanedInstanceId);
           setLetterData(null);
         }
       } catch (error) {
@@ -44,7 +51,7 @@ function ApproveState() {
         
         // Handle specific error cases
         if (error.message.includes('400')) {
-          console.error("❌ Instance ID not found or invalid:", instanceId);
+          console.error("❌ Instance ID not found or invalid:", cleanedInstanceId);
         }
         
         setLetterData(null);
@@ -54,7 +61,7 @@ function ApproveState() {
     };
 
     fetchLetterData();
-  }, [instanceId]);
+  }, [cleanedInstanceId]);
 
   // ✅ Handle Approve / Reject / Restart actions (without API call)
   const handleAction = (status) => {
@@ -123,7 +130,7 @@ function ApproveState() {
         ❌ Letter Not Found
       </Typography>
       <Typography variant="body1" color="textSecondary" align="center">
-        No letter data found for Instance ID: <strong>{instanceId}</strong>
+        No letter data found for Instance ID: <strong>{cleanedInstanceId || instanceId}</strong>
       </Typography>
       <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
         This could mean:

@@ -101,9 +101,18 @@ export async function updateHRLetterDetails(data) {
 
 export async function getHRLetterDetailsByInstanceID(instanceId) {
   try {
-    console.log(`🔍 Fetching instance details for ID: ${instanceId}`);
+    // Normalize the incoming instanceId to a number to avoid spaces/strings
+    const idNum = Number.parseInt(String(instanceId).trim(), 10);
+    if (!Number.isFinite(idNum) || idNum <= 0) {
+      console.error('❌ Invalid instanceId supplied to getHRLetterDetailsByInstanceID:', instanceId);
+      return null;
+    }
+
+    const url = `${baseURL}/api/HRLetter/GetHRLetterDetailsByInstanceID?InstanceID=${idNum}`;
+    console.log(`🔍 Fetching instance details for ID: ${idNum}`);
+    console.log('🌐 GET', url);
     
-    const response = await fetch(`${baseURL}/api/HRLetter/GetHRLetterDetailsByInstanceID?InstanceID=${instanceId}`, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
@@ -117,7 +126,7 @@ export async function getHRLetterDetailsByInstanceID(instanceId) {
       
       // Add specific error messages for common status codes
       if (response.status === 400) {
-        errorMessage += ` (Instance ID '${instanceId}' not found or invalid)`;
+        errorMessage += ` (Instance ID '${idNum}' not found or invalid)`;
       } else if (response.status === 404) {
         errorMessage += ` (API endpoint not found)`;
       } else if (response.status === 500) {
