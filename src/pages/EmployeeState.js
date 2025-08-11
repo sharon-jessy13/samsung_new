@@ -218,7 +218,7 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
 
         <Box className="form-section">
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <Typography className="label">Letter required for (Reason)</Typography>
               <TextareaAutosize
                 required
@@ -230,7 +230,7 @@ function EmployeeState({instanceId, workflowState, setWorkflowState, onSubmit })
 
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <Typography className="label">Number of Copies</Typography>
               <TextField
                 type="number"

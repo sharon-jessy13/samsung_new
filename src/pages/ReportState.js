@@ -4,18 +4,52 @@ import {
   Typography,
   Grid,
   TextField,
- 
   Avatar,
   Divider,
   IconButton,
- 
+  Container,
 } from "@mui/material";
 import { ArrowBack, Assignment, Description, GetApp, PictureAsPdf } from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getHRLetterDetailsByInstanceID } from '../services/apiclient';
+
+// Normalize API response keys to the camelCase names used by the UI
+function normalizeLetterData(d = {}) {
+  if (!d) return null;
+  const n = {
+    employeeName: d.employeeName || d.empName || d.EmployeeName || d.EmpName || '',
+    genId: d.genId || d.GenId || d.generalId || d.GeneralId || '',
+    email: d.email || d.emailId || d.Email || d.EmailId || '',
+    designation: d.designation || d.Designation || '',
+    division: d.division || d.Division || '',
+    manager: d.manager || d.Manager || d.managerName || d.ManagerName || '',
+
+    letterType: d.letterType || d.LetterType || '',
+    reason: d.reason || d.Reason || '',
+    comment: d.comment || d.Comment || '',
+
+    permanentAddress: d.permanentAddress || d.PermanentAddress || '',
+    currentAddress: d.currentAddress || d.CurrentAddress || '',
+    ltrReqOnCuOrPeAdd: d.ltrReqOnCuOrPeAdd || d.LtrReqOnCuOrPeAdd || d.letterRequiredOn || d.LetterRequiredOn || '',
+
+    numberOfCopies: d.numberOfCopies ?? d.noOfCopies ?? d.copies ?? d.NoOfCopies ?? '',
+    offAddOfCorrespondance: d.offAddOfCorrespondance || d.officeAddressOfCorrespondence || d.OfficeAddressOfCorrespondence || '',
+
+    noc_LeaveFrom: d.noc_LeaveFrom || d.nocLeaveFrom || d.NOC_LeaveFrom || d.NOCLeaveFrom || '',
+    noc_LeaveTo: d.noc_LeaveTo || d.nocLeaveTo || d.NOC_LeaveTo || d.NOCLeaveTo || '',
+
+    attachment: d.attachment || d.Attachment || null,
+    attachmentName: d.attachmentName || d.AttachmentName || '',
+    attachmentUrl: d.attachmentUrl || d.attachmentPath || d.AttachmentUrl || d.AttachmentPath || '',
+    attachmentDate: d.attachmentDate || d.AttachmentDate || '',
+    attachmentFileSize: d.attachmentFileSize || d.AttachmentFileSize || '',
+  };
+  return n;
+}
 
 export default function ReportState() {
   const { instanceId } = useParams();
+  const navigate = useNavigate();
   // Normalize instanceId to digits only (handles cases like ":12345678")
   const cleanedInstanceId = String(instanceId || '')
     .trim()
@@ -39,7 +73,8 @@ export default function ReportState() {
         console.log("📋 ReportState: Fetching letter data for instance ID:", cleanedInstanceId);
         const data = await getHRLetterDetailsByInstanceID(cleanedInstanceId);
         console.log("✅ ReportState: Letter data received:", data);
-        setLetterData(data);
+        const normalized = normalizeLetterData(data);
+        setLetterData(normalized);
       } catch (error) {
         console.error("❌ ReportState: Error fetching letter data:", error);
       } finally {
@@ -54,15 +89,16 @@ export default function ReportState() {
   if (!letterData) return <Typography>No report data found for Instance ID: {cleanedInstanceId || instanceId}</Typography>;
 
   return (
-    <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', p: 2 }}>
+    <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', py: 3 }}>
+      <Container maxWidth="lg">
       {/* Header Section */}
-      <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 1, mb: 2 }}>
+      <Box sx={{ backgroundColor: 'white', p: 2.5, borderRadius: 2, mb: 2 }}>
         <Typography variant="caption" sx={{ color: '#666' }}>
           My Workspace &gt; HR Letter &gt; Report
         </Typography>
         
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, mb: 2 }}>
-          <IconButton size="small">
+          <IconButton size="small" onClick={() => navigate(-1)} aria-label="Go back">
             <ArrowBack />
           </IconButton>
           <Typography variant="body2" sx={{ ml: 1 }}>
@@ -109,7 +145,7 @@ export default function ReportState() {
       </Box>
 
       {/* Required Information Section */}
-      <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 1, mb: 2 }}>
+      <Box sx={{ backgroundColor: 'white', p: 2.5, borderRadius: 2, mb: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Assignment sx={{ color: '#1976d2', mr: 1 }} />
           <Typography fontWeight="bold">Required Information</Typography>
@@ -299,7 +335,7 @@ export default function ReportState() {
       </Box>
 
       {/* View Policies Section */}
-      <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 1 }}>
+      <Box sx={{ backgroundColor: 'white', p: 2.5, borderRadius: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Description sx={{ color: '#666', mr: 1 }} />
           <Typography variant="body2" color="text.secondary">
@@ -307,6 +343,7 @@ export default function ReportState() {
           </Typography>
         </Box>
       </Box>
+      </Container>
     </Box>
   );
 }
