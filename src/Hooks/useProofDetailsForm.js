@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import {
   getLetterTypes,
-  getEmpResourceType,
   getHRLetterDetailsByInstanceID,
   updateHRLetterDetails
 } from "../services/apiclient";
@@ -18,15 +17,10 @@ export default function useProofDetailsForm(initialData) {
   const [permanentAddress, setPermanentAddress] = useState('');
   const [currentAddress, setCurrentAddress] = useState('');
   const [addressType, setAddressType] = useState(''); // For "ltrReqOnCurOrPerAdd"
-  const [numberOfCopies, setNumberOfCopies] = useState(1); // Optional
   const [officeAddress, setOfficeAddress] = useState('');
-  const [placeOfTravel, setPlaceOfTravel] = useState('');
   const [letterTypeKey, setLetterTypeKey] = useState('');
   const [letterTypes, setLetterTypes] = useState([]);
   const [mempId, setMempId] = useState(''); // Employee ID to be entered by user
-  const [hasAccess, setHasAccess] = useState(false); // Access permission status
-  const [isCheckingAccess, setIsCheckingAccess] = useState(false); // Loading state for access check
-  const [accessChecked, setAccessChecked] = useState(false); // Whether access check has been performed
   const [isSubmitting, setIsSubmitting] = useState(false); // Prevent multiple submissions
 
 
@@ -43,46 +37,6 @@ export default function useProofDetailsForm(initialData) {
     fetchLetterTypes();
   }, []);
 
-
-  // Check employee access permission
-  const handleCheckAccess = async () => {
-    if (!mempId || mempId === '0' || parseInt(mempId, 10) === 0) {
-      alert("Please enter a valid Employee ID (non-zero)");
-      return;
-    }
-
-    setIsCheckingAccess(true);
-    try {
-      console.log(`🔍 Checking access for Employee ID: ${mempId}`);
-      
-      // Call API to check if employee has access
-      const resourceType = await getEmpResourceType(parseInt(mempId, 10));
-      console.log("Resource Type:", resourceType);
-
-      // Only allow access when API explicitly returns 1
-      if (resourceType === 1) {
-        setHasAccess(true);
-        setAccessChecked(true);
-        alert("✅ Access granted! You can now fill out the HR letter request form.");
-
-        // Fetch letter types after access is granted
-        const letterTypesData = await getLetterTypes();
-        setLetterTypes(letterTypesData);
-      } else {
-        // Covers 0, null, undefined, or any non-1 value
-        setHasAccess(false);
-        setAccessChecked(true);
-        alert("❌ Access denied. You are not authorized to submit HR letter requests.");
-      }
-    } catch (error) {
-      console.error("Error checking access:", error);
-      setHasAccess(false);
-      setAccessChecked(true);
-      alert("❌ Error checking access. Please verify your Employee ID and try again.");
-    } finally {
-      setIsCheckingAccess(false);
-    }
-  };
 
   const handleLetterTypeChange = (e) => {
     const selectedType = e.target.value;
@@ -136,9 +90,7 @@ export default function useProofDetailsForm(initialData) {
         currentAddress: currentAddress || "",
         ltrReqOnCuOrPeAdd: addressType || "",
         reason: reason || "",
-        numberOfCopies: numberOfCopies || 1,
         offAddOfCorrespondance: officeAddress || "",
-        placeOfTravel: placeOfTravel || "",
         noc_LeaveFrom: nocFromDate || null,
         noc_LeaveTo: nocToDate || null
       };
@@ -218,20 +170,12 @@ export default function useProofDetailsForm(initialData) {
     setNocFromDate,
     nocToDate,
     setNocToDate,
-    numberOfCopies,
-    setNumberOfCopies,
     officeAddress,
     setOfficeAddress,
-    placeOfTravel,
-    setPlaceOfTravel,
     instanceId,
     setInstanceId,
     mempId,
     setMempId,
-    hasAccess,
-    isCheckingAccess,
-    accessChecked,
-    handleCheckAccess,
     isSubmitting,
     handleSubmit,
     handleLetterTypeChange

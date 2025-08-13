@@ -420,21 +420,7 @@ function ApproveState() {
             />
           </Grid>
 
-          {/* Number of Copies (if provided) */}
-          {(letterData?.numberOfCopies ?? letterData?.noOfCopies ?? letterData?.copies) !== undefined && (
-            <Grid item xs={12} md={12}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                Number of Copies
-              </Typography>
-              <TextField
-                fullWidth
-                value={(letterData.numberOfCopies ?? letterData.noOfCopies ?? letterData.copies)?.toString()}
-                InputProps={{ readOnly: true }}
-                variant="outlined"
-                size="small"
-              />
-            </Grid>
-          )}
+          {/* Number of Copies removed */}
 
           {/* Comment */}
           <Grid item xs={12}>
