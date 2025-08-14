@@ -1,82 +1,307 @@
-.header-bar {
-  background-color: #fff !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important; /* subtle shadow under navbar */
-  padding: 0 16px;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  min-height: 64px;
-}
-
-.left-section {
+.navbar {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 32px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  background: #fff;
+  height: 56px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
-.logo-text {
-  color: #000;
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-left: 32px;
+}
+
+.navbar-icon {
+  font-size: 22px !important;
+  color: #7b7b7b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0;
+}
+
+.navbar-title {
+  font-weight: 600;
+  font-size: 17px;
+  margin-right: 18px;
+  color: #222;
+}
+
+.navbar-tab {
+  background: none;
+  border: none;
+  padding: 7px 22px;
+  border-radius: 20px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #7b7b7b;
+  margin-right: 2px;
+  transition: background 0.2s, color 0.2s;
   font-weight: 500;
 }
 
-.tab-active {
-  border-radius: 20px;
-  background-color: #3FBCE6 !important;
-  margin: 0 8px;
-  text-transform: none;
-  width:121px;
-  height: 31px;
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 700;
-  font-style: medium;
+.navbar-tab.active {
+  background: #2ec4f1;
+  color: #fff;
+  font-weight: 600;
 }
 
-.tab-inactive {
-  border-radius: 100px;
-  background-color: #E8E8E8 !important;
-  text-transform: none;
-  color:black  !important;
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  min-width: 300px;
 }
 
-.right-section {
+/* --- SEARCH BAR --- */
+.navbar-search-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  margin-right: 16px;
 }
 
-.search-field {
-  background-color: #f5f5f5;
-  border-radius: 20px;
-  min-width: 180px;
+.navbar-search-icon {
+  position: absolute;
+  left: 0;
+  color: #888;
+  pointer-events: none;
+  z-index: 2;
+  font-size: 20px !important;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.search-input {
-  padding: 6px 8px !important;
+.navbar-search {
+  width: 200px;
+  padding: 8px 0 8px 32px;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 0;
+  font-size: 15px;
+  background: transparent;
+  outline: none;
+  color: #222;
+  box-shadow: none;
+  font-family: inherit;
 }
 
-.search-icon {
-  color: gray;
-  font-size: 20px;
+.navbar-search:focus {
+  border-bottom: 2px solid #2196f3;
+  background: transparent;
 }
 
-.profile-info {
+.navbar-search::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+/* --- ICONS --- */
+.navbar-icon,
+.navbar-search-icon {
+  color: #6d6d6d !important; /* slightly darker gray for exact match */
+  font-size: 28px !important; /* ensure consistent size */
+}
+
+/* --- NOTIFICATION BADGE --- */
+.navbar-icon.notification {
+  position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.navbar-icon.notification .dot {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  min-width: 22px;
+  height: 22px;
+  background: #ff3b3b;
+  color: #fff;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 6px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 28px; /* more space between icons */
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
   gap: 8px;
 }
 
-.profile-text {
-  text-align: right;
+.navbar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #e5e7eb;
 }
 
-.name {
-  font-weight: bold;
-  color: #000;
+.navbar-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
 }
 
-.role {
-  color: gray;
+.navbar-user-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #222;
+}
+
+.navbar-user-title {
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+}
+
+.nest-icon {
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-tabs-group {
+  display: flex;
+  background: #ededed;
+  border-radius: 999px;
+  padding: 0;
+  margin-left: 24px;
+  height: 31px;
+  width: 230px;
+  align-items: center;
+  
+}
+
+.navbar-tab {
+  border: none;
+  background: transparent;
+  color: #222;
+  font-size: 1rem;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 400;
+  padding: 0 40px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  height: 31px;
+  width: 110px;
+}
+
+.navbar-tab.active {
+  background: linear-gradient(90deg, #2ec4f1 0%, #3ba7e6 100%);
+  color: #fff;
+  font-weight: 500;
+  box-shadow: none;
+  height: 31px;
+  width: 121px;
+} 
+
+/* Remove old icon group styles */
+.navbar-icon-group {
+  display: none;
+}
+
+/* Transfer Workflow Styles */
+.transfer-workflow {
+  display: flex;
+  align-items: center;
+  background: #e6f7fd;
+  border-radius: 8px;
+  padding: 8px 16px;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 20px;
+}
+
+.transfer-workflow:hover {
+  background: #d1f2fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(46, 196, 241, 0.2);
+}
+
+.transfer-workflow-icon {
+  color: #6c5ce7;
+  font-size: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transfer-workflow-text {
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+  white-space: nowrap;
+}
+
+.transfer-workflow-arrow {
+  color: #222;
+  font-size: 16px !important;
+  margin-left: 4px;
+}
+
+/* Add top margin to body to account for fixed navbar */
+body {
+  margin-top: 56px;
+} 
+
+.navbar-icon-pill-group {
+  display: flex;
+  align-items: center;
+  background: #e6f6fd;
+  border-radius: 24px;
+  padding: 6px 18px;
+  gap: 16px;
+  margin-right: 18px;
+  box-shadow: none;
+}
+
+.navbar-pill-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #555;
 }

@@ -11,6 +11,8 @@ import {
 import { ArrowBack, AlarmOn, Assignment } from '@mui/icons-material';
 import '../styles/HrHeader.css';
 import EmployeeState from '../pages/EmployeeState';
+import avthar from '../assets/avthar.svg';
+import online from "../assets/Avatar online indicator.svg";
 
 
 export default function HRHeader() {
@@ -24,7 +26,7 @@ export default function HRHeader() {
     manager: "Ravindra S R (06786669)",
     avatar: "/avatar.png"
   };
-  
+
 
   return (
     <>
@@ -45,17 +47,19 @@ export default function HRHeader() {
         </Box>
         <Grid container alignItems="center">
           {/* Employee Details */}
-          <Grid item xs={12} sm={4} md={3}>
-            <Box display="flex" alignItems="center" className="employee-details">
-              <Avatar src={employee.avatar} alt={employee.name} sx={{ width: 56, height: 56, mr: 1.5 }} />
-              <Box>
-                <Typography fontWeight="bold">
-                  {employee.name} • Gen ID: {employee.genId}
-                </Typography>
-                <Typography variant="body2">{employee.email}</Typography>
-              </Box>
-            </Box>
-          </Grid>
+
+          <div class="employee-details">
+            <div class="avatar-wrapper">
+              <img src={avthar} class="avatar" />
+              <span class="online-indicator"></span>
+            </div>
+            <div class="employee-info">
+              <strong>{employee.name} • Gen ID: {employee.genId}</strong>
+              <div class="employee-email">{employee.email}</div>
+            </div>
+          </div>
+
+          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
 
           {/* Designation */}
           <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
@@ -92,7 +96,7 @@ export default function HRHeader() {
             Required Information
           </Typography>
         </Box>
-        <EmployeeState/>
+        <EmployeeState />
       </Box>
     </>
   );

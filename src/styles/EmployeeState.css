@@ -1,23 +1,27 @@
 /* Root container */
 .proof-details-container {
   padding: 24px;
-  background-color: #F9FAFB; /* Match form section background */
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #F9FAFB;
+  border-radius: 10px;
   font-family: 'Roboto', sans-serif;
+  max-width: 1392px;
+  margin-left:24px;;
 }
 
-/* Header styles */
+/* Header */
 .proof-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  margin-left: 24px;
 }
 
 .proof-header-title {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #101928;
+  font-style: bold;
 }
 
 .proof-note {
@@ -36,18 +40,16 @@
   color: #333;
 }
 
-/* Form section spacing */
+/* Form section */
 .form-section {
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   padding: 16px;
-  gap: 12px;
-  border: 0.5px #D0D5DD;
   border-radius: 6px;
-  width: 1320px !important;
-  height: 123px !important;
+  background-color: #fff;
+  
 }
 
-/* Typography and inputs */
+/* Labels */
 .label {
   font-size: 14px;
   font-weight: 700;
@@ -57,28 +59,55 @@
   font-style: bold;
 }
 
-.select-box .MuiSelect-select {
-  background-color: #ffffff;
+/* Select box */
+.select-box {
+  width: 415px;
+  font-size: 14px;
   border-radius: 8px;
-  padding: 12px;
+  background-color:#FFFFFF;
+  border: none;
+  gap: 40px;
+  height: 48px;
 }
 
-.select-box .MuiOutlinedInput-notchedOutline {
-  border-color: #ffffff;
+.select-box:focus {
+  outline: none;
+  background-color: #e8f0fe;
 }
 
-.textarea {
-  width: 100%;
-  border: 1px solid #555;
-  border-radius: 8px;
-  padding: 12px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  resize: vertical;
-  background-color: #ffffff;
+/* Textarea */
+.textareacomment {
+  width: 1320px;
+  height: 90px;
+  border: 0.5px;
+  border-radius: 6px;
+  gap: 12px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  font-size: 14px;
+  resize: horizontal;
+  background-color: #FFFFFF;
+  border-color: #D0D5DD;
+}
+.textarealabel{
+  width: 1285px;
+  height: 56px !important;
+  gap: 12px;
+  border: 1px;
+  padding: 16px;
+  radius:6px;
+  background-color: #FFFFFF !important ;
+  border-color: #D0D5DD;
+  border-radius: 6px;
 }
 
+.textarea:focus {
+  outline: none;
+  background-color: #FFFFFF;
+}
 
+/* Submit button */
 .form-submit {
   text-align: right;
 }
@@ -100,26 +129,34 @@
   background-color: #125ea2;
 }
 
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* View policies link */
 .view-policies {
   display: flex;
   align-items: center;
   gap: 6px;
   margin-top: 20px;
-  color: #666;
+  color: #606060;
+  font-size: 14px;
 }
 
 .policy-icon {
-  color: #1976d2;
+  color: #606060;
+  margin-left: 24px;
+  width: 20px;
+  height: 20px;
 }
 
-/* Make placeholders white for better contrast on grey inputs */
-textarea::placeholder,
-input::placeholder,
-.MuiInputBase-input::placeholder {
-  color: #ffffff !important;
-  opacity: 1; /* Ensure full visibility across browsers */
+.policy-link {
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.9rem;
 }
-.action-button{
-  text-align: right;
+
+.policy-link:hover {
+  text-decoration: underline;
 }

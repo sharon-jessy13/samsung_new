@@ -45,8 +45,8 @@
 }
 
 .divider {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 20px !important;
+  margin-right: 20px !important;
   border-color: #e0e0e0;
 }
 .required-info-section {
@@ -61,6 +61,7 @@
   color: #00C853; /* Green clipboard */
   width: 24px;
   height: 26px;
+  margin-left: 15px;
   
   
 }
@@ -71,4 +72,38 @@
   font-size: 20px !important;
   
 }
+.employee-details {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
 
+.employee-info{
+  margin: 15px;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.online-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background-color: #4CAF50; /* green */
+  border-radius: 50%;
+  border: 2px solid white;
+  transform: translate(5%, 5%); /* slight inward overlap */
+}
