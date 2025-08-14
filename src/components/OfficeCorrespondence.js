@@ -7,6 +7,7 @@ function OfficeCorrespondence({ officeAddress, setOfficeAddress }){
             <Typography className="label">Office Address of Correspondence (Use ‘ , ’ for separation)</Typography>
             <TextareaAutosize
               minRows={3}
+              fullWidth
               placeholder="Enter office address, separated by commas"
               value={officeAddress}
               onChange={(e) => setOfficeAddress(e.target.value)}

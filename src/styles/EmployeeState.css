@@ -1,6 +1,6 @@
 /* Root container */
 .proof-details-container {
-  padding: 24px;
+  padding: 16px;
   background-color: #F9FAFB;
   border-radius: 10px;
   font-family: 'Roboto', sans-serif;
@@ -42,8 +42,8 @@
 
 /* Form section */
 .form-section {
-  margin-bottom: 16px;
-  padding: 16px;
+  margin-bottom: 12px;
+  padding: 12px;
   border-radius: 6px;
   background-color: #fff;
   
@@ -53,7 +53,7 @@
 .label {
   font-size: 14px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   display: block;
   color: #111827;
   font-style: bold;
@@ -67,7 +67,7 @@
   background-color:#FFFFFF;
   border: none;
   gap: 40px;
-  height: 48px;
+  height: 44px;
 }
 
 .select-box:focus {
@@ -158,4 +158,32 @@
 
 .policy-link:hover {
   text-decoration: underline;
+}
+
+/* Inline row fields for grouped inputs (e.g., NOC dates) */
+.row-fields {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.row-fields .field {
+  flex: 1 1 300px;
+  min-width: 260px;
+}
+
+/* Make inputs inside row fill available space */
+.row-fields .select-box,
+.row-fields input[type="text"],
+.row-fields input[type="date"],
+.row-fields select,
+.row-fields textarea {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .row-fields {
+    flex-direction: column;
+  }
 }

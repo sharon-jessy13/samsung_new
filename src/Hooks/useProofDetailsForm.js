@@ -6,6 +6,23 @@ import {
 } from "../services/apiclient";
 
 export default function useProofDetailsForm(initialData) {
+  // Toggle to force static payload submission regardless of form inputs
+  const USE_STATIC_SUBMIT = true;
+  const STATIC_PAYLOAD_BASE = {
+    lrid: 0,
+    // instanceID will be injected at submit time
+    MempId: 16843,
+    lKeyValue: "NOC",
+    letterType: "No Objection Certificate",
+    permanentAddress: "123, Main Street, Hyderabad",
+    currentAddress: "456, Residency Road, Bangalore",
+    ltrReqOnCuOrPeAdd: "Current",
+    reason: "For official travel purposes",
+    offAddOfCorrespondance: "Samsung Office, Bangalore",
+    noc_LeaveFrom: "2025-08-15",
+    noc_LeaveTo: "2025-08-20"
+  };
+
   const [instanceId, setInstanceId] = useState(initialData.instanceId || "");
 
   const [letterType, setLetterType] = useState('');
@@ -61,6 +78,44 @@ export default function useProofDetailsForm(initialData) {
     }
 
     try {
+      // If static submit is enabled, bypass form validations and post static payload
+      if (USE_STATIC_SUBMIT) {
+        setIsSubmitting(true);
+        const generatedInstanceId = Math.floor(Math.random() * 90000000) + 10000000;
+        setInstanceId(generatedInstanceId);
+
+        const payload = { ...STATIC_PAYLOAD_BASE, instanceID: generatedInstanceId };
+        console.log("Submitting STATIC payload:", payload);
+
+        const response = await updateHRLetterDetails(payload);
+        console.log("API Response (static submit):", response);
+
+        alert("✅ Form submitted successfully with static data!");
+        setIsSubmitted(true);
+
+        const responseInstanceId = response && (response.data?.instanceID || response.instanceID);
+        const finalId = responseInstanceId || generatedInstanceId;
+        if (responseInstanceId) {
+          console.log("📋 Instance ID from API response:", responseInstanceId);
+        } else {
+          console.log("ℹ️ Using locally generated Instance ID (no ID returned by API):", finalId);
+        }
+        setInstanceId(finalId);
+
+        // Optional verification fetch
+        try {
+          const verify = await getHRLetterDetailsByInstanceID(finalId);
+          console.log("🔎 Verify after POST (static):", verify);
+          if (!verify || verify.status === false || verify.data == null) {
+            console.warn("⚠️ Verification: No details found for Instance ID:", finalId);
+          }
+        } catch (verifyErr) {
+          console.error("❌ Verification GET failed (static):", verifyErr);
+        }
+
+        return finalId;
+      }
+
       // Validate required fields BEFORE locking submit state
       if (!mempId || mempId === '0' || parseInt(mempId, 10) === 0) {
         alert("Please enter a valid Employee ID (non-zero)");
