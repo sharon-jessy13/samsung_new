@@ -81,47 +81,47 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
         )}
       </div> */}
       {/* Letter Type */}
-      <div className="form-section">
-        <label className="label">Type of Letter Required</label>
-        <select
-          value={letterType}
-          onChange={handleLetterTypeChange}
-          className="select-box"
-        >
-          <option value="">-- Select --</option>
-          {letterTypes.map((type) => (
-            <option key={type.lkeyvalue} value={type.letterType}>
-              {type.letterType}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* NOC Dates */}
-      {letterType === 'No Objection Certificate' && (
-        <div className="form-section row-fields">
-          <div className="field">
-            <label className="label">Leave From</label>
-            <input
-              type="date"
-              value={nocFromDate}
-              onChange={(e) => setNocFromDate(e.target.value)}
-              className="select-box"
-            />
-          </div>
-          <div className="field">
-            <label className="label">Leave To</label>
-            <input
-              type="date"
-              value={nocToDate}
-              onChange={(e) => setNocToDate(e.target.value)}
-              className="select-box"
-            />
-          </div>
+      <div className={`form-section row-fields`}>
+        <div className="field">
+          <label className="label">Type of Letter Required</label>
+          <select
+            value={letterType}
+            onChange={handleLetterTypeChange}
+            className="select-box"
+          >
+            <option value="">-- Select --</option>
+            {letterTypes.map((type) => (
+              <option key={type.lkeyvalue} value={type.letterType}>
+                {type.letterType}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
 
-
+        {/* NOC Dates */}
+        {letterType === "No Objection Certificate" && (
+          <>
+            <div className="field">
+              <label className="label">Leave From</label>
+              <input
+                type="date"
+                value={nocFromDate}
+                onChange={(e) => setNocFromDate(e.target.value)}
+                className="select-box"
+              />
+            </div>
+            <div className="field">
+              <label className="label">Leave To</label>
+              <input
+                type="date"
+                value={nocToDate}
+                onChange={(e) => setNocToDate(e.target.value)}
+                className="select-box"
+              />
+            </div>
+          </>
+        )}
+      </div>
       {/* Conditional Sections */}
       {letterType === 'Address Proof' && (
         <AddressProof
