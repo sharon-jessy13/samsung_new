@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/AddressProof.css";
 import {
   Box,
@@ -10,7 +10,7 @@ import {
   Select,
 } from "@mui/material";
 
-function Addressproof({
+function AddressProof({
   permanentAddress,
   setPermanentAddress,
   currentAddress,
@@ -18,32 +18,35 @@ function Addressproof({
   addressType,
   setAddressType
 }) {
-
   return (
-    <Box className="form-section"> 
+    <Box className="form-section">
       <Typography className="section-title">Personal Details</Typography>
-      <Grid container spacing={2} className="letter-grid">
-        <Grid item xs={12} sm={3}>
+
+      {/* Row with 3 equal columns */}
+      <Grid container spacing={2} className="address-row">
+        <Grid item xs={12} md={4}>
           <Typography className="label">Permanent Address</Typography>
           <TextField
             placeholder="Enter Permanent Address"
             value={permanentAddress}
             fullWidth
             onChange={(e) => setPermanentAddress(e.target.value)}
-            className="select-box"
+            className="input-box"
           />
         </Grid>
-        <Grid item xs={12} sm={3}>
+
+        <Grid item xs={12} md={4}>
           <Typography className="label">Current Address</Typography>
           <TextField
             placeholder="Enter Current Address"
             fullWidth
             value={currentAddress}
             onChange={(e) => setCurrentAddress(e.target.value)}
-            className="select-box"
+            className="input-box"
           />
         </Grid>
-        <Grid item xs={12} sm={3}>
+
+        <Grid item xs={12} md={4}>
           <FormControl fullWidth>
             <Typography className="label">
               Letter required for Permanent or Current Address
@@ -51,7 +54,7 @@ function Addressproof({
             <Select
               value={addressType}
               onChange={(e) => setAddressType(e.target.value)}
-              className="select-box"
+              className="input-box"
             >
               <MenuItem value="Permanent">Permanent</MenuItem>
               <MenuItem value="Current">Current</MenuItem>
@@ -63,4 +66,4 @@ function Addressproof({
   );
 }
 
-export default Addressproof;
+export default AddressProof;
