@@ -24,7 +24,7 @@ function AddressProof({
 
       {/* Row with 3 equal columns */}
       <Grid container spacing={2} className="address-row">
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           <Typography className="label">Permanent Address</Typography>
           <TextField
             placeholder="Enter Permanent Address"
@@ -35,7 +35,7 @@ function AddressProof({
           />
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           <Typography className="label">Current Address</Typography>
           <TextField
             placeholder="Enter Current Address"
@@ -46,7 +46,7 @@ function AddressProof({
           />
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           <FormControl fullWidth>
             <Typography className="label">
               Letter required for Permanent or Current Address
