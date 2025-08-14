@@ -44,7 +44,7 @@ export default function useProofDetailsForm(initialData) {
     setIsSubmitted(false);
     setReason('');
     setComment('');
-    
+
     // Find the selected letter type and set the key
     const selectedLetterType = letterTypes.find(type => type.letterType === selectedType);
     if (selectedLetterType) {
@@ -76,33 +76,34 @@ export default function useProofDetailsForm(initialData) {
       }
 
       setIsSubmitting(true);
-      
-      const generatedInstanceId = Math.floor(Math.random() * 90000000) + 10000000; // Generate random 8-digit number 
-      // Persist generated ID immediately so UI can show something even before API responds
+
+      const generatedInstanceId = Math.floor(Math.random() * 90000000) + 10000000;
       setInstanceId(generatedInstanceId);
+
       const payload = {
         lrid: 0,
         instanceID: generatedInstanceId,
-        MempId: parseInt(mempId),
-        lKeyValue: letterTypeKey || letterType, // Fallback to letterType if key is missing
-        letterType: letterType,
-        permanentAddress: permanentAddress || "",
-        currentAddress: currentAddress || "",
-        ltrReqOnCuOrPeAdd: addressType || "",
-        reason: reason || "",
-        offAddOfCorrespondance: officeAddress || "",
-        noc_LeaveFrom: nocFromDate || null,
-        noc_LeaveTo: nocToDate || null
+        MempId: 16843,  
+        lKeyValue: "NOC", 
+        letterType: "No Objection Certificate", 
+        permanentAddress: "123, Main Street, Hyderabad", 
+        currentAddress: "456, Residency Road, Bangalore", 
+        ltrReqOnCuOrPeAdd: "Current", 
+        reason: "For official travel purposes", 
+        offAddOfCorrespondance: "Samsung Office, Bangalore", 
+        noc_LeaveFrom: "2025-08-15", 
+        noc_LeaveTo: "2025-08-20" 
       };
-      console.log("Submitting payload:", payload);
+
+      console.log("Submitting static payload:", payload);
 
       const response = await updateHRLetterDetails(payload);
       console.log("API Response:", response);
-      
-      // Show success message regardless of API response structure
+
       alert("✅ Form submitted successfully!");
+
       setIsSubmitted(true);
-      
+
       // Determine final instance ID (prefer server-confirmed ID)
       const responseInstanceId = response && (response.data?.instanceID || response.instanceID);
       const finalId = responseInstanceId || generatedInstanceId;
@@ -112,7 +113,7 @@ export default function useProofDetailsForm(initialData) {
         console.log("ℹ️ Using locally generated Instance ID (no ID returned by API):", finalId);
       }
       setInstanceId(finalId);
-      
+
       // Additional success handling if API returns specific status
       if (response && response.status) {
         console.log("HR Letter details updated successfully in backend");
@@ -135,7 +136,7 @@ export default function useProofDetailsForm(initialData) {
       return finalId;
     } catch (error) {
       console.error("Error submitting form:", error);
-      
+
       // More specific error handling
       if (error.message.includes('400')) {
         alert("❌ Bad Request: Please check all required fields are filled correctly.");
@@ -144,7 +145,7 @@ export default function useProofDetailsForm(initialData) {
       } else {
         alert(`❌ Error: ${error.message || 'Unknown error occurred'}`);
       }
-      
+
     } finally {
       setIsSubmitting(false); // Reset submission state
     }

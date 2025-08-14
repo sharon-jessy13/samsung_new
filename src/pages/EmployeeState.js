@@ -1,4 +1,4 @@
-import React,{useEffect, useState}from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/EmployeeState.css';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -73,13 +73,13 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
           <img src={noteicon} />
         </div>
       </div>
-      <div>
+      {/* <div>
         {isEligible ? (
           <p style={{ color: "green" }}>✅ Eligible to apply</p>
         ) : (
           <p style={{ color: "red" }}>❌ Not eligible</p>
         )}
-      </div>
+      </div> */}
       {/* Letter Type */}
       <div className="form-section">
         <label className="label">Type of Letter Required</label>
@@ -99,8 +99,8 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
 
       {/* NOC Dates */}
       {letterType === 'No Objection Certificate' && (
-        <>
-          <div className="form-section">
+        <div className="form-section row-fields">
+          <div className="field">
             <label className="label">Leave From</label>
             <input
               type="date"
@@ -109,7 +109,7 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
               className="select-box"
             />
           </div>
-          <div className="form-section">
+          <div className="field">
             <label className="label">Leave To</label>
             <input
               type="date"
@@ -118,8 +118,9 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
               className="select-box"
             />
           </div>
-        </>
+        </div>
       )}
+
 
       {/* Conditional Sections */}
       {letterType === 'Address Proof' && (
