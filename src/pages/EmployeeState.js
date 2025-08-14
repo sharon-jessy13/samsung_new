@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect, useState}from 'react';
 import '../styles/EmployeeState.css';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -7,8 +7,13 @@ import noteicon from '../assets/noteicon.svg';
 import AddressProof from '../components/AddressProof';
 import NOC from '../components/NOC';
 import OfficeCorrespondence from '../components/OfficeCorrespondence';
+import { getEmpResourceType } from '../services/apiclient';
 
 function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }) {
+  const MEmpID = 16843; // ✅ Static Employee ID
+  const [isEligible, setIsEligible] = useState(null);
+  const [error, setError] = useState("");
+
   const {
     letterTypes,
     letterType,
@@ -34,6 +39,31 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
     handleSubmit,
   } = useProofDetailsForm({ instanceId, onSubmit });
 
+
+  useEffect(() => {
+    async function fetchResourceType() {
+      try {
+        const resourceType = await getEmpResourceType(MEmpID);
+        console.log("Resource Type:", resourceType);
+
+        if (resourceType === 1) {
+          setIsEligible(true);
+        } else {
+          setIsEligible(false);
+          alert("You are not eligible to apply for the letter.");
+        }
+      } catch (err) {
+        setError("Failed to load resource type.");
+        console.error(err);
+      }
+    }
+
+    fetchResourceType();
+  }, []);
+
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (isEligible === null) return <p>Checking eligibility...</p>;
+
   return (
     <div className="proof-details-container">
       {/* Header */}
@@ -43,7 +73,13 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
           <img src={noteicon} />
         </div>
       </div>
-
+      <div>
+        {isEligible ? (
+          <p style={{ color: "green" }}>✅ Eligible to apply</p>
+        ) : (
+          <p style={{ color: "red" }}>❌ Not eligible</p>
+        )}
+      </div>
       {/* Letter Type */}
       <div className="form-section">
         <label className="label">Type of Letter Required</label>
@@ -151,5 +187,6 @@ function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }
     </div>
   );
 }
+
 
 export default EmployeeState;
