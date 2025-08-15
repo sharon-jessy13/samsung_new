@@ -48,7 +48,7 @@ export async function updateHRLetterDetails(data) {
   try {
     console.log(" Sending payload to API:", data);
     
-    const response = await fetch('http://107.108.5.184:66/api/HRLetter/UpdateDetails', {
+    const response = await fetch(`${baseURL}/api/HRLetter/UpdateDetails`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -100,55 +100,13 @@ export async function updateHRLetterDetails(data) {
 }
 
 export async function getHRLetterDetailsByInstanceID(instanceId) {
-  try {
-    // Normalize the incoming instanceId to a number to avoid spaces/strings
-    const idNum = Number.parseInt(String(instanceId).trim(), 10);
-    if (!Number.isFinite(idNum) || idNum <= 0) {
-      console.error('❌ Invalid instanceId supplied to getHRLetterDetailsByInstanceID:', instanceId);
-      return null;
-    }
-
-    const url = `${baseURL}/api/HRLetter/GetHRLetterDetailsByInstanceID?InstanceID=${idNum}`;
-    console.log(`🔍 Fetching instance details for ID: ${idNum}`);
-    console.log('🌐 GET', url);
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-
-    console.log(`📡 Response status: ${response.status} ${response.statusText}`);
-
-    if (!response.ok) {
-      let errorMessage = `HTTP error! status: ${response.status} - ${response.statusText}`;
-      
-      // Add specific error messages for common status codes
-      if (response.status === 400) {
-        errorMessage += ` (Instance ID '${idNum}' not found or invalid)`;
-      } else if (response.status === 404) {
-        errorMessage += ` (API endpoint not found)`;
-      } else if (response.status === 500) {
-        errorMessage += ` (Server error)`;
-      }
-      
-      throw new Error(errorMessage);
-    }
-
-    const data = await response.json();
-    console.log("📥 Raw API response:", data);
-    
-    // Check if API returns data in expected format
-    if (data && data.status !== undefined) {
-      console.log("✅ API response has status field:", data.status);
-      return data.status ? data.data : data; // Return data.data if status is true, otherwise return full response
-    }
-    
-    return data;
-  } catch (error) {
-    console.error('❌ Error fetching instance details:', error);
-    console.error('❌ Error details:', error.message);
-    return null;
+  const res = await fetch(
+    `${baseURL}/api/HRLetter/GetHRLetterDetailsByInstanceID?InstanceID=${instanceId}`
+  );
+  const json = await res.json();
+  if (json.status && json.data) {
+    return json.data; 
+  } else {
+    throw new Error(json.message || "Failed to fetch letter details");
   }
 }

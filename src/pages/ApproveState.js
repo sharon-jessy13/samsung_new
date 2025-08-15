@@ -37,33 +37,18 @@ function ApproveState() {
       handleSubmit,
     } = useProofDetailsForm({ instanceId: instanceId });
 
-  useEffect(() => {
+ useEffect(() => {
   async function fetchData() {
-    console.log("instanceId from URL params:", instanceId);
+    if (!instanceId) return;
 
-    if (!instanceId) {
-      console.warn("No instanceId found in URL. Skipping API call.");
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
     try {
-      console.log("Fetching HR letter details for:", instanceId);
-
-      const data = await getHRLetterDetailsByInstanceID(instanceId);
-
-      console.log("API response:", data);
-
-      setLetterData(data);
-    } catch (error) {
-      console.error("Error fetching letter details:", error);
-      setLetterData(null);
-    } finally {
-      setLoading(false);
+      const letterDetails = await getHRLetterDetailsByInstanceID(instanceId);
+      console.log("Fetched letter details:", letterDetails);
+      setLetterData(letterDetails);
+    } catch (err) {
+      console.error("Error fetching letter:", err);
     }
   }
-
   fetchData();
 }, [instanceId]);
 
