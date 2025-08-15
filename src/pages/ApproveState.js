@@ -9,7 +9,8 @@ function ApproveState() {
   const [loading, setLoading] = useState(true);
   const [letterData, setLetterData] = useState(null);
   const [approverComment, setApproverComment] = useState("");
-  const { instanceID } = useParams();
+  const { instanceId } = useParams();
+  const navigate = useNavigate();
 
    const {
       letterTypes,
@@ -34,28 +35,42 @@ function ApproveState() {
       isSubmitting,
       handleLetterTypeChange,
       handleSubmit,
-    } = useProofDetailsForm({ instanceId: instanceID });
+    } = useProofDetailsForm({ instanceId: instanceId });
 
   useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      try {
-        const data = await getHRLetterDetailsByInstanceID(instanceID);
-        setLetterData(data);
-      } catch (error) {
-        console.error("Error fetching letter details:", error);
-      }
+  async function fetchData() {
+    console.log("instanceId from URL params:", instanceId);
+
+    if (!instanceId) {
+      console.warn("No instanceId found in URL. Skipping API call.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      console.log("Fetching HR letter details for:", instanceId);
+
+      const data = await getHRLetterDetailsByInstanceID(instanceId);
+
+      console.log("API response:", data);
+
+      setLetterData(data);
+    } catch (error) {
+      console.error("Error fetching letter details:", error);
+      setLetterData(null);
+    } finally {
       setLoading(false);
     }
-    if (instanceID) {
-      fetchData();
-    }
-  }, [instanceID]);
+  }
+
+  fetchData();
+}, [instanceId]);
 
   const handleAction = async (action) => {
     if (!letterData) return;
     const payload = {
-      instanceID,
+      instanceId,
       action,
       approverComment,
     };
