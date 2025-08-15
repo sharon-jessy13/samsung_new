@@ -34,7 +34,7 @@ function ApproveState() {
       isSubmitting,
       handleLetterTypeChange,
       handleSubmit,
-    } = useProofDetailsForm();
+    } = useProofDetailsForm({ instanceId: instanceID });
 
   useEffect(() => {
     async function fetchData() {

@@ -5,7 +5,7 @@ import {
   updateHRLetterDetails
 } from "../services/apiclient";
 
-export default function useProofDetailsForm(initialData) {
+export default function useProofDetailsForm(initialData = {}) {
   const [instanceId, setInstanceId] = useState(initialData.instanceId || "");
   const [letterType, setLetterType] = useState('');
   const [letterTypes, setLetterTypes] = useState([]);
