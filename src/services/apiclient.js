@@ -44,10 +44,10 @@ export async function getEmpResourceType(MEmpID) {
   }
 }
 
-export async function updateHRLetterDetails(data) {
+export async function updateHRLetterApproval(data) {
   try {
-    console.log(" Sending payload to API:", data);
-    
+    console.log("Sending approval payload:", data);
+
     const response = await fetch(`${baseURL}/api/HRLetter/UpdateDetails`, {
       method: 'POST',
       headers: {
@@ -57,47 +57,23 @@ export async function updateHRLetterDetails(data) {
     });
 
     const result = await response.json();
-    console.log(" API Response:", result);
+    console.log("Approval API Response:", result);
 
     if (!response.ok) {
-      // Extract detailed error information from the response
-      const errorMessage = result.message || result.error || `HTTP ${response.status}: ${response.statusText}`;
-      const validationErrors = result.errors || result.details || '';
-      
-      throw new Error(`${errorMessage}${validationErrors ? ` - ${JSON.stringify(validationErrors)}` : ''}`);
+      throw new Error(result.message || `HTTP ${response.status}: ${response.statusText}`);
     }
 
-    // Check if API returns status: false (business logic failure)
     if (result && result.status === false) {
-      console.error(" API returned status: false");
-      console.error(" Error message:", result.message || 'No error message provided');
-      console.error(" Error details:", result.errors || result.details || 'No error details provided');
-      
-      // Check if instance ID is available even with status: false
-      if (result.data && result.data.instanceID) {
-        console.log("📋 Instance ID available despite status: false -", result.data.instanceID);
-      } else if (result.instanceID) {
-        console.log("📋 Instance ID available despite status: false -", result.instanceID);
-      }
-      
-      // Create error with instance ID included if available
-      const errorMsg = result.message || 'API request failed';
-      const errorDetails = result.errors || result.details || '';
-      const instanceId = result.data?.instanceID || result.instanceID || null;
-      
-      const error = new Error(`${errorMsg}${errorDetails ? ` - ${JSON.stringify(errorDetails)}` : ''}`);
-      error.instanceId = instanceId; // Attach instance ID to error object
-      error.apiResponse = result; // Attach full response for debugging
-      
-      throw error;
+      throw new Error(result.message || "Approval request failed");
     }
 
     return result;
   } catch (error) {
-    console.error(" API Error:", error);
+    console.error("Approval API Error:", error);
     throw error;
   }
 }
+
 
 export async function getHRLetterDetailsByInstanceID(instanceId) {
   const res = await fetch(

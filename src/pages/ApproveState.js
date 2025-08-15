@@ -4,6 +4,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import HrHeader from '../components/HrHeader';
 import  TranferWorkflow from '../assets/TransferWorkflow.svg';
 import useProofDetailsForm from '../Hooks/useProofDetailsForm';
+import avthar from '../assets/avthar.svg';
+import {
+  Box,
+  Grid,
+  Typography,
+  Avatar,
+  Divider,
+  IconButton,
+  Container,
+} from '@mui/material';
+import { ArrowBack, AlarmOn, Assignment } from '@mui/icons-material';
 
 function ApproveState() {
   const [loading, setLoading] = useState(true);
@@ -11,7 +22,16 @@ function ApproveState() {
   const [approverComment, setApproverComment] = useState("");
   const { instanceId } = useParams();
   const navigate = useNavigate();
-
+  const [workflowState, setWorkflowState] = useState('Initiate');
+    const employee = {
+      name: "Manoj Kandan M",
+      genId: "25504878",
+      email: "manoj.kandan@partner.samsung.com",
+      designation: "Outsourcing",
+      division: "Tech Strategy Team\\Smart Infra Group\\Information System & AI Tools",
+      manager: "Ravindra S R (06786669)",
+      avatar: "/avatar.png"
+    }
    const {
       letterTypes,
       letterType,
@@ -95,6 +115,74 @@ function ApproveState() {
 
   
   return (
+   <Box className="hr-header-container">
+        <Typography variant="caption" className="breadcrumb">
+          My Workspace &gt; HR Letter
+        </Typography>
+
+        <Box className="header-row">
+          <Box display="flex" alignItems="center" gap={1}>
+            <IconButton size="small">
+              <ArrowBack />
+            </IconButton>
+            <Typography variant="body2">HR Request.{workflowState} </Typography>
+
+          </Box>
+          <AlarmOn className="clock-icon" />
+        </Box>
+        <Grid container alignItems="center">
+          {/* Employee Details */}
+
+          <div class="employee-details">
+            <div class="avatar-wrapper">
+              <img src={avthar} class="avatar" />
+              <span class="online-indicator"></span>
+            </div>
+            <div class="employee-info">
+              <strong>{employee.name} • Gen ID: {employee.genId}</strong>
+              <div class="employee-email">{employee.email}</div>
+            </div>
+          </div>
+
+          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+
+          {/* Designation */}
+          <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+            <Typography variant="body2" color="text.secondary">Designation</Typography>
+            <Typography fontWeight="bold">{employee.designation}</Typography>
+          </Grid>
+
+          {/* Divider */}
+
+          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+
+
+          {/* Division */}
+          <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+            <Typography variant="body2" color="text.secondary">Division</Typography>
+            <Typography fontWeight="bold">{employee.division}</Typography>
+          </Grid>
+
+          {/* Divider */}
+
+          <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+
+
+          {/* Manager */}
+          <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+            <Typography variant="body2" color="text.secondary">Manager</Typography>
+            <Typography fontWeight="bold">{employee.manager}</Typography>
+          </Grid>
+        </Grid>
+
+        <Box className="required-info-section">
+          <Assignment className="required-info-icon" />
+          <Typography fontWeight="bold" className="required-info-text">
+            Required Information
+          </Typography>
+        </Box>
+        
+
     <div className="form-container">
       {/* Proof Details */}
       <h3 className="section-title">Proof Details</h3>
@@ -183,6 +271,263 @@ function ApproveState() {
       {/* View Policies */}
       <div className="view-policies">View Policies</div>
     </div>
+    </Box>
   );
 }
 export default ApproveState;
+
+
+
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   Box,
+//   Grid,
+//   Typography,
+//   Avatar,
+//   Divider,
+//   IconButton,
+//   Container,
+//   Button,
+//   TextField,
+// } from "@mui/material";
+// import { ArrowBack } from "@mui/icons-material";
+// import { useNavigate, useParams } from "react-router-dom";
+// import avthar from "../assets/avthar.svg";
+// import online from "../assets/Avatar online indicator.svg";
+// import {
+//   getHRLetterDetailsByInstanceID,
+//   updateHRLetterApproval
+// } from "../services/apiclient";
+// import useProofDetailsForm from "../Hooks/useProofDetailsForm";
+// import "../styles/ApproveState.css";
+
+// export default function ApproveState() {
+//   const [loading, setLoading] = useState(true);
+//   const [employee, setEmployee] = useState(null);
+//   const [approverComment, setApproverComment] = useState("");
+
+//   const { instanceId } = useParams();
+//   const cleanInstanceId = instanceId?.replace(":", ""); // remove ":" before fetch
+//   const navigate = useNavigate();
+
+//   const {
+//     letterType,
+//     setLetterType,
+//     addressType,
+//     setAddressType,
+//     reason,
+//     setReason,
+//     comment,
+//     setComment,
+//     permanentAddress,
+//     setPermanentAddress,
+//     currentAddress,
+//     setCurrentAddress,
+//     nocFromDate,
+//     setNocFromDate,
+//     nocToDate,
+//     setNocToDate,
+//     officeAddress,
+//     setOfficeAddress,
+//     isSubmitting,
+//     handleLetterTypeChange,
+//     handleSubmit,
+//   } = useProofDetailsForm({ instanceId: cleanInstanceId });
+
+//   useEffect(() => {
+//     async function fetchData() {
+//       if (!cleanInstanceId) return;
+
+//       try {
+//         const res = await getHRLetterDetailsByInstanceID(cleanInstanceId);
+//         console.log("Fetched letter details:", res);
+
+//         if (res?.data && res.data.length > 0) {
+//           const details = res.data[0];
+
+//           setEmployee({
+//             name: details.fullName,
+//             genId: details.genID,
+//             email: details.email || "",
+//             designation: details.designation,
+//             division: details.division || "",
+//             manager: details.manager || "",
+//           });
+
+//           setLetterType(details.letterType || "");
+//           setPermanentAddress(details.permanentAddress || "");
+//           setCurrentAddress(details.currentAddress || "");
+//           setAddressType(details.letterRequiredOnCurrentOrPermanentAdd || "");
+//           setReason(details.reason || "");
+//           setComment(details.comment || "");
+//           setNocFromDate(details.nocFromDate || "");
+//           setNocToDate(details.nocToDate || "");
+//           setOfficeAddress(details.officeAddress || "");
+//         }
+//       } catch (err) {
+//         console.error("Error fetching letter:", err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     }
+//     fetchData();
+//   }, [cleanInstanceId]);
+
+//   const handleApprove = async () => {
+//     try {
+//       await updateHRLetterApproval({
+//         instanceId: cleanInstanceId,
+//         status: "Approved",
+//         approverComment,
+//       });
+//       navigate("/approvals");
+//     } catch (err) {
+//       console.error("Error approving letter:", err);
+//     }
+//   };
+
+//   const handleReject = async () => {
+//     try {
+//       await updateHRLetterApproval({
+//         instanceId: cleanInstanceId,
+//         status: "Rejected",
+//         approverComment,
+//       });
+//       navigate("/approvals");
+//     } catch (err) {
+//       console.error("Error rejecting letter:", err);
+//     }
+//   };
+
+//   if (loading) {
+//     return <Typography>Loading...</Typography>;
+//   }
+
+//   return (
+//     <Container maxWidth="lg" className="approve-container">
+//       {/* Header */}
+//       <Box display="flex" alignItems="center" mb={2}>
+//         <IconButton onClick={() => navigate(-1)}>
+//           <ArrowBack />
+//         </IconButton>
+//         <Typography variant="h5" fontWeight="bold" ml={1}>
+//           Approve HR Letter Request
+//         </Typography>
+//       </Box>
+
+//       {/* Employee Header */}
+//       <Box className="employee-header" display="flex" alignItems="center">
+//         <Box position="relative">
+//           <Avatar src={avthar} alt="Employee" sx={{ width: 64, height: 64 }} />
+//           <img
+//             src={online}
+//             alt="Online"
+//             style={{
+//               position: "absolute",
+//               bottom: 0,
+//               right: 0,
+//               width: 16,
+//               height: 16,
+//             }}
+//           />
+//         </Box>
+//         <Grid container alignItems="center" ml={2}>
+//           <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+//             <Typography variant="body2" color="text.secondary">
+//               Employee Name
+//             </Typography>
+//             <Typography fontWeight="bold">{employee?.name || "N/A"}</Typography>
+//           </Grid>
+//           <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+//           <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+//             <Typography variant="body2" color="text.secondary">
+//               Gen ID
+//             </Typography>
+//             <Typography fontWeight="bold">{employee?.genId || "N/A"}</Typography>
+//           </Grid>
+//           <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+//           <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+//             <Typography variant="body2" color="text.secondary">
+//               Designation
+//             </Typography>
+//             <Typography fontWeight="bold">
+//               {employee?.designation || "N/A"}
+//             </Typography>
+//           </Grid>
+//           <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+//           <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+//             <Typography variant="body2" color="text.secondary">
+//               Division
+//             </Typography>
+//             <Typography fontWeight="bold">
+//               {employee?.division || "N/A"}
+//             </Typography>
+//           </Grid>
+//           <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+//           <Grid item xs={12} sm="auto" sx={{ px: 2 }}>
+//             <Typography variant="body2" color="text.secondary">
+//               Manager
+//             </Typography>
+//             <Typography fontWeight="bold">
+//               {employee?.manager || "N/A"}
+//             </Typography>
+//           </Grid>
+//         </Grid>
+//       </Box>
+
+//       {/* Letter Details */}
+//       <Box className="form-section" mt={3}>
+//         <Typography variant="body1" fontWeight="bold" gutterBottom>
+//           Letter Type: {letterType}
+//         </Typography>
+//         <Typography>Permanent Address: {permanentAddress}</Typography>
+//         <Typography>Current Address: {currentAddress}</Typography>
+//         <Typography>Reason: {reason}</Typography>
+//         <Typography>Comment: {comment}</Typography>
+//         {letterType === "No Objection Certificate" && (
+//           <>
+//             <Typography>Leave From: {nocFromDate}</Typography>
+//             <Typography>Leave To: {nocToDate}</Typography>
+//           </>
+//         )}
+//         {letterType === "Office Correspondence" && (
+//           <Typography>Office Address: {officeAddress}</Typography>
+//         )}
+//       </Box>
+
+//       {/* Approver Comment */}
+//       <Box mt={3}>
+//         <TextField
+//           label="Approver Comment"
+//           multiline
+//           rows={3}
+//           fullWidth
+//           value={approverComment}
+//           onChange={(e) => setApproverComment(e.target.value)}
+//         />
+//       </Box>
+
+//       {/* Action Buttons */}
+//       <Box display="flex" justifyContent="flex-end" mt={3}>
+//         <Button
+//           variant="contained"
+//           color="success"
+//           onClick={handleApprove}
+//           sx={{ mr: 2 }}
+//         >
+//           Approve
+//         </Button>
+//         <Button variant="contained" color="error" onClick={handleReject}>
+//           Reject
+//         </Button>
+//       </Box>
+//     </Container>
+//   );
+// }

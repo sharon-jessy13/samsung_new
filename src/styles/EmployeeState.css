@@ -76,15 +76,15 @@
   font-weight: 500;
 }
 
-.select-box,
+/* .select-box,
 input[type="date"] {
   width: 100%;
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
-}
+} */
 
-/* Select box */
+
 .select-box {
   width: 415px;
   font-size: 14px;
@@ -92,7 +92,7 @@ input[type="date"] {
   background-color:#FFFFFF;
   border: none;
   gap: 40px;
-  height: 44px;
+  height: 48px;
 }
 
 .select-box:focus {

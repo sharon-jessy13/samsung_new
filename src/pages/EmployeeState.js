@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import '../styles/EmployeeState.css';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import useProofDetailsForm from '../Hooks/useProofDetailsForm';
 import noteicon from '../assets/noteicon.svg';
 import AddressProof from '../components/AddressProof';
 import NOC from '../components/NOC';
 import OfficeCorrespondence from '../components/OfficeCorrespondence';
 import { getEmpResourceType } from '../services/apiclient';
+import useProofDetailsForm from "../Hooks/useProofDetailsForm";
+
 
 function EmployeeState({ instanceId, workflowState, setWorkflowState, onSubmit }) {
   const MEmpID = 16843; // ✅ Static Employee ID
