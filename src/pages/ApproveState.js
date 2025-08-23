@@ -252,31 +252,41 @@ function ApproveState() {
             </div>
             <div className="field">
               <label className="label">Attachment</label>
-              {attachment ? (
+              {file ? (
                 <div className="attachment-box">
                   <div className="attachment-icon">PDF</div>
                   <div className="attachment-details">
-                    <span>{attachment.name}</span>
+                    <span>{file.name}</span>
                     <span className="attachment-meta">
-                      {new Date().toLocaleDateString()} • {(attachment.size / (1024 * 1024)).toFixed(1)}MB
+                      {new Date().toLocaleDateString()} • {(file.size / (1024 * 1024)).toFixed(1)}MB
                     </span>
                   </div>
                   <a
-                    href={URL.createObjectURL(attachment)}
-                    download={attachment.name}
+                    href={URL.createObjectURL(file)}
+                    download={file.name}
                     className="btn-download"
                   >
                     ⬇ Download
+                  </a>
+                  <a
+                    href={URL.createObjectURL(file)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-download"
+                    style={{ marginLeft: "10px" }}
+                  >
+                    View
                   </a>
                 </div>
               ) : (
                 <input
                   type="file"
                   accept=".pdf,.jpg,.png"
-                  onChange={(e) => setAttachment(e.target.files[0])}
+                  onChange={(e) => setFile(e.target.files[0])}
                 />
               )}
             </div>
+
 
           </>
         )}
