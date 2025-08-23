@@ -166,6 +166,7 @@ export default function useProofDetailsForm(initialData = {}) {
   const [letterTypes, setLetterTypes] = useState([]);
   const [letterTypeKey, setLetterTypeKey] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // const isViewMode = workflowState === 'Approval' || workflowState === 'Report';
 
   // Form fields
   const [reason, setReason] = useState("");
@@ -177,6 +178,25 @@ export default function useProofDetailsForm(initialData = {}) {
   const [addressType, setAddressType] = useState("");
   const [officeAddress, setOfficeAddress] = useState("");
   const [mempId, setMempId] = useState("");
+
+  const [files, setFiles] = useState([]);
+  
+    const handleFileUpload = (event) => {
+      const uploadedFiles = Array.from(event.target.files);
+      const pdfFiles = uploadedFiles.map((file) => ({
+        name: file.name,
+        size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+        type: file.type,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        fileUrl: URL.createObjectURL(file),
+      }));
+      setFiles((prev) => [...prev, ...pdfFiles]);
+    };
+  
+    const handleDelete = (index) => {
+      setFiles(files.filter((_, i) => i !== index));
+    };
 
   // Fetch letter types on mount
   useEffect(() => {
@@ -319,6 +339,9 @@ export default function useProofDetailsForm(initialData = {}) {
     setMempId,
     isSubmitting,
     handleSubmit,
-    handleLetterTypeChange
+    handleLetterTypeChange,
+    handleFileUpload,
+    handleDelete,
+    // isViewMode,
   };
 }

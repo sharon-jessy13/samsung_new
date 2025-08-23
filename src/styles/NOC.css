@@ -1,0 +1,98 @@
+/* Container */
+.file-upload-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Upload card */
+.upload-card {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  width: 280px;
+  background: #f9f9f9;
+}
+
+.upload-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-icon {
+  font-size: 24px;
+}
+
+.upload-btn {
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background: #0056b3;
+}
+
+/* File Preview Section */
+.file-preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+/* File card */
+.file-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.file-icon {
+  font-size: 28px;
+  color: #e74c3c;
+}
+
+.file-info {
+  flex: 1;
+}
+
+.file-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.view-btn {
+  color: #007bff;
+  text-decoration: none;
+  margin-right: 8px;
+}
+
+.view-btn:hover {
+  text-decoration: underline;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  font-size: 18px;
+}
+
+.delete-btn:hover {
+  color: darkred;
+}
